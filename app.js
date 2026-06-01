@@ -1657,7 +1657,163 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadFromLocalStorage();
 
-    // ===== ANIMATED CONNECTIONS ===== (loaded early, see drawConnections patch before localStorage load)
+    // ===== DESIGN TOOLS =====
+    let designNodes = [];
+    let designIdCounter = 0;
+    let draggedDesign = null;
+    let isDraggingDesign = false;
+    let designDragOffset = { x: 0, y: 0 };
+    let selectedDesignNode = null;
+
+    // Toggle design tool panels
+    document.querySelectorAll('.design-tool-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const tool = item.dataset.tool;
+            const panel = document.getElementById('design-panel-' + tool);
+            const wasActive = item.classList.contains('active');
+
+            // Close all panels first
+            document.querySelectorAll('.design-tool-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.design-panel').forEach(p => p.style.display = 'none');
+
+            // Toggle the clicked one
+            if (!wasActive && panel) {
+                item.classList.add('active');
+                panel.style.display = '';
+            }
+        });
+    });
+
+    // Drag design elements
+    document.querySelectorAll('.design-element').forEach(el => {
+        el.addEventListener('dragstart', (e) => {
+            draggedDesign = JSON.parse(el.dataset.design);
+            e.dataTransfer.effectAllowed = 'copy';
+            e.dataTransfer.setData('text/plain', 'design');
+        });
+        el.addEventListener('dragend', () => { draggedDesign = null; });
+    });
+
+    // Drop design elements on canvas
+    canvasContainer.addEventListener('drop', (e) => {
+        if (!draggedDesign) return;
+        e.preventDefault();
+        const rect = canvasContainer.getBoundingClientRect();
+        const x = (e.clientX - rect.left - panOffset.x) / zoomLevel - 40;
+        const y = (e.clientY - rect.top - panOffset.y) / zoomLevel - 20;
+        addDesignNode(draggedDesign, Math.max(0, x), Math.max(0, y));
+        draggedDesign = null;
+    });
+
+    function addDesignNode(design, x, y) {
+        const id = 'design-' + designIdCounter++;
+        const node = { id, ...design, x, y };
+        designNodes.push(node);
+        renderDesignNode(node);
+        hideCanvasEmpty();
+        showToast(`${design.label} added to canvas`, 'success');
+    }
+
+    function renderDesignNode(node) {
+        const div = document.createElement('div');
+        div.className = 'canvas-design-node just-added';
+        div.id = node.id;
+        div.style.left = node.x + 'px';
+        div.style.top = node.y + 'px';
+
+        let inner = '';
+        switch (node.type) {
+            case 'text':
+                inner = `<div class="design-node-text" contenteditable="true">Text box</div>`;
+                break;
+            case 'note':
+                inner = `<div class="design-node-note" contenteditable="true">Add your note here...</div>`;
+                break;
+            case 'label':
+                inner = `<div class="design-node-label">${node.label}</div>`;
+                break;
+            case 'divider':
+                inner = `<div class="design-node-divider"></div>`;
+                break;
+            case 'rectangle':
+                inner = `<div class="design-node-rect"></div>`;
+                break;
+            case 'rounded-rect':
+                inner = `<div class="design-node-rect rounded"></div>`;
+                break;
+            case 'arrow-right':
+                inner = `<div class="design-node-arrow">&#8594;</div>`;
+                break;
+            case 'arrow-down':
+                inner = `<div class="design-node-arrow">&#8595;</div>`;
+                break;
+            case 'icon':
+                inner = `<div class="design-node-icon"><span class="icon-symbol" style="color:${node.color}">${node.icon}</span><span class="icon-label">${node.label}</span></div>`;
+                break;
+            case 'logo':
+                inner = `<div class="design-node-logo"><div class="logo-badge" style="background:${node.color}">${node.icon}</div><span class="logo-name">${node.label}</span></div>`;
+                break;
+            case 'shape':
+                const shapeClass = node.label === 'Circle' ? 'circle' : node.label === 'Diamond' ? 'diamond' : '';
+                inner = `<div class="design-node-shape ${shapeClass}"><span style="color:${node.color}">${node.icon}</span></div>`;
+                break;
+            default:
+                inner = `<div class="design-node-text">${node.label}</div>`;
+        }
+
+        div.innerHTML = `<button class="design-node-delete" data-id="${node.id}">&times;</button>${inner}`;
+        canvasArea.appendChild(div);
+        setTimeout(() => div.classList.remove('just-added'), 300);
+
+        // Drag to move
+        div.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.design-node-delete')) return;
+            if (e.target.isContentEditable) return; // Don't drag while editing text
+            selectedDesignNode = node;
+            isDraggingDesign = true;
+            const r = div.getBoundingClientRect();
+            designDragOffset.x = e.clientX - r.left;
+            designDragOffset.y = e.clientY - r.top;
+            // Deselect canvas nodes
+            selectedNodes.clear();
+            updateNodeSelectionVisuals();
+            div.classList.add('selected');
+            e.preventDefault();
+        });
+
+        // Delete
+        div.querySelector('.design-node-delete').addEventListener('click', () => {
+            designNodes = designNodes.filter(n => n.id !== node.id);
+            div.remove();
+            showToast(`${node.label} removed`, 'info');
+        });
+    }
+
+    // Design node dragging
+    document.addEventListener('mousemove', (e) => {
+        if (isDraggingDesign && selectedDesignNode) {
+            const containerRect = canvasContainer.getBoundingClientRect();
+            const x = (e.clientX - containerRect.left - panOffset.x) / zoomLevel - designDragOffset.x;
+            const y = (e.clientY - containerRect.top - panOffset.y) / zoomLevel - designDragOffset.y;
+            selectedDesignNode.x = Math.max(0, x);
+            selectedDesignNode.y = Math.max(0, y);
+            const el = document.getElementById(selectedDesignNode.id);
+            if (el) { el.style.left = selectedDesignNode.x + 'px'; el.style.top = selectedDesignNode.y + 'px'; }
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (isDraggingDesign) {
+            isDraggingDesign = false;
+            if (selectedDesignNode) {
+                const el = document.getElementById(selectedDesignNode.id);
+                if (el) el.classList.remove('selected');
+            }
+            selectedDesignNode = null;
+        }
+    });
+
+    // ===== ANIMATED CONNECTIONS =====
 
     // ===== RUBBER BAND SELECTION =====
     let isBoxSelecting = false;

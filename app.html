@@ -6,7 +6,7 @@
     <title>CloudForge | Visual Cloud Designer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="app.css?v=3">
+    <link rel="stylesheet" href="app.css?v=4">
 </head>
 <body>
     <div class="app-layout">
@@ -209,6 +209,53 @@
                                     <div class="design-tool-item" data-tool="icons"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg><span>Icons</span></div>
                                     <div class="design-tool-item" data-tool="logos"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>Logos</span></div>
                                     <div class="design-tool-item" data-tool="shapes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg><span>Shapes</span></div>
+                                </div>
+                                <!-- Expandable design element grids -->
+                                <div class="design-panel" id="design-panel-custom" style="display:none;">
+                                    <div class="design-grid">
+                                        <div class="design-element" draggable="true" data-design='{"type":"text","label":"Text Box","icon":"T","color":"#6366f1"}'><div class="de-icon" style="color:#6366f1;">T</div><span>Text</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"note","label":"Note","icon":"N","color":"#f59e0b"}'><div class="de-icon" style="color:#f59e0b;">N</div><span>Note</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"label","label":"Label","icon":"L","color":"#10b981"}'><div class="de-icon" style="color:#10b981;">L</div><span>Label</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"divider","label":"Divider","icon":"--","color":"#9ca3af"}'><div class="de-icon" style="color:#9ca3af;">--</div><span>Divider</span></div>
+                                    </div>
+                                </div>
+                                <div class="design-panel" id="design-panel-general" style="display:none;">
+                                    <div class="design-grid">
+                                        <div class="design-element" draggable="true" data-design='{"type":"rectangle","label":"Rectangle","icon":"&#9645;","color":"#3b82f6"}'><div class="de-icon" style="color:#3b82f6;">&#9645;</div><span>Rect</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"rounded-rect","label":"Rounded Rect","icon":"&#9723;","color":"#8b5cf6"}'><div class="de-icon" style="color:#8b5cf6;">&#9723;</div><span>Rounded</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"arrow-right","label":"Arrow Right","icon":"&#8594;","color":"#6366f1"}'><div class="de-icon" style="color:#6366f1;">&#8594;</div><span>Arrow R</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"arrow-down","label":"Arrow Down","icon":"&#8595;","color":"#6366f1"}'><div class="de-icon" style="color:#6366f1;">&#8595;</div><span>Arrow D</span></div>
+                                    </div>
+                                </div>
+                                <div class="design-panel" id="design-panel-icons" style="display:none;">
+                                    <div class="design-grid">
+                                        <div class="design-element" draggable="true" data-design='{"type":"icon","label":"Server","icon":"&#9881;","color":"#ff6b00"}'><div class="de-icon" style="color:#ff6b00;">&#9881;</div><span>Server</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"icon","label":"Database","icon":"&#9736;","color":"#8b5cf6"}'><div class="de-icon" style="color:#8b5cf6;">&#9736;</div><span>Database</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"icon","label":"Cloud","icon":"&#9729;","color":"#3b82f6"}'><div class="de-icon" style="color:#3b82f6;">&#9729;</div><span>Cloud</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"icon","label":"User","icon":"&#9787;","color":"#10b981"}'><div class="de-icon" style="color:#10b981;">&#9787;</div><span>User</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"icon","label":"Lock","icon":"&#9888;","color":"#ef4444"}'><div class="de-icon" style="color:#ef4444;">&#9888;</div><span>Security</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"icon","label":"Globe","icon":"&#9788;","color":"#3b82f6"}'><div class="de-icon" style="color:#3b82f6;">&#9788;</div><span>Internet</span></div>
+                                    </div>
+                                </div>
+                                <div class="design-panel" id="design-panel-logos" style="display:none;">
+                                    <div class="design-grid">
+                                        <div class="design-element" draggable="true" data-design='{"type":"logo","label":"AWS","icon":"aws","color":"#ff9900"}'><div class="de-icon de-logo" style="background:#ff9900;color:#fff;">aws</div><span>AWS</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"logo","label":"Azure","icon":"Az","color":"#0078d4"}'><div class="de-icon de-logo" style="background:#0078d4;color:#fff;">Az</div><span>Azure</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"logo","label":"GCP","icon":"GC","color":"#4285f4"}'><div class="de-icon de-logo" style="background:#4285f4;color:#fff;">GC</div><span>GCP</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"logo","label":"Docker","icon":"DK","color":"#2496ed"}'><div class="de-icon de-logo" style="background:#2496ed;color:#fff;">DK</div><span>Docker</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"logo","label":"K8s","icon":"K8","color":"#326ce5"}'><div class="de-icon de-logo" style="background:#326ce5;color:#fff;">K8</div><span>K8s</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"logo","label":"Terraform","icon":"TF","color":"#7b42bc"}'><div class="de-icon de-logo" style="background:#7b42bc;color:#fff;">TF</div><span>Terraform</span></div>
+                                    </div>
+                                </div>
+                                <div class="design-panel" id="design-panel-shapes" style="display:none;">
+                                    <div class="design-grid">
+                                        <div class="design-element" draggable="true" data-design='{"type":"shape","label":"Circle","icon":"&#9679;","color":"#6366f1"}'><div class="de-icon" style="color:#6366f1;">&#9679;</div><span>Circle</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"shape","label":"Diamond","icon":"&#9670;","color":"#8b5cf6"}'><div class="de-icon" style="color:#8b5cf6;">&#9670;</div><span>Diamond</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"shape","label":"Triangle","icon":"&#9650;","color":"#f59e0b"}'><div class="de-icon" style="color:#f59e0b;">&#9650;</div><span>Triangle</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"shape","label":"Star","icon":"&#9733;","color":"#ef4444"}'><div class="de-icon" style="color:#ef4444;">&#9733;</div><span>Star</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"shape","label":"Hexagon","icon":"&#11042;","color":"#10b981"}'><div class="de-icon" style="color:#10b981;">&#11042;</div><span>Hexagon</span></div>
+                                        <div class="design-element" draggable="true" data-design='{"type":"shape","label":"Pentagon","icon":"&#11040;","color":"#3b82f6"}'><div class="de-icon" style="color:#3b82f6;">&#11040;</div><span>Pentagon</span></div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -816,6 +863,6 @@ resource "aws_s3_bucket" "data" {
     <!-- Toast -->
     <div class="toast-container" id="toast-container"></div>
 
-    <script src="app.js?v=3"></script>
+    <script src="app.js?v=4"></script>
 </body>
 </html>
