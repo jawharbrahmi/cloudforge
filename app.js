@@ -525,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyCanvasTransform() {
         canvasArea.style.transform = `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoomLevel})`;
-        canvasSvg.style.transform = `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoomLevel})`;
+        // SVG is now inside canvasArea, no separate transform needed
         updateMinimap();
     }
 
@@ -1909,12 +1909,146 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('Nodes auto-aligned', 'success');
     });
 
-    // ===== MODULE CATALOG (mock) =====
+    // ===== MODULE CATALOG =====
+    const moduleDefinitions = {
+        'vpc-full': [
+            { resource: { id: 'vpc', label: 'VPC', type: 'aws_vpc', detail: '10.0.0.0/16', tf: 'aws_vpc', catName: 'Network' }, x: 60, y: 60 },
+            { resource: { id: 'subnet', label: 'Subnet', type: 'aws_subnet', detail: 'public-1a', tf: 'aws_subnet', catName: 'Network' }, x: 300, y: 20 },
+            { resource: { id: 'subnet', label: 'Subnet', type: 'aws_subnet', detail: 'private-1a', tf: 'aws_subnet', catName: 'Network' }, x: 300, y: 130 },
+            { resource: { id: 'natgw', label: 'NAT GW', type: 'aws_nat_gateway', detail: 'elastic IP', tf: 'aws_nat_gateway', catName: 'Network' }, x: 540, y: 20 },
+            { resource: { id: 'sg', label: 'Sec Group', type: 'aws_security_group', detail: 'default', tf: 'aws_security_group', catName: 'Security' }, x: 540, y: 130 },
+        ],
+        'eks': [
+            { resource: { id: 'vpc', label: 'VPC', type: 'aws_vpc', detail: '10.0.0.0/16', tf: 'aws_vpc', catName: 'Network' }, x: 60, y: 80 },
+            { resource: { id: 'ecs', label: 'EKS', type: 'aws_eks_cluster', detail: 'v1.29', tf: 'aws_eks_cluster', catName: 'Compute' }, x: 300, y: 30 },
+            { resource: { id: 'autoscaling', label: 'Node Group', type: 'aws_eks_node_group', detail: 't3.large x3', tf: 'aws_eks_node_group', catName: 'Compute' }, x: 300, y: 150 },
+            { resource: { id: 'iam_role', label: 'Cluster Role', type: 'aws_iam_role', detail: 'eks-cluster', tf: 'aws_iam_role', catName: 'Security' }, x: 540, y: 80 },
+        ],
+        'rds-full': [
+            { resource: { id: 'rds', label: 'RDS', type: 'aws_db_instance', detail: 'PostgreSQL 16', tf: 'aws_db_instance', catName: 'Database' }, x: 60, y: 60 },
+            { resource: { id: 'subnet', label: 'DB Subnet', type: 'aws_db_subnet_group', detail: 'private', tf: 'aws_db_subnet_group', catName: 'Network' }, x: 300, y: 20 },
+            { resource: { id: 'sg', label: 'DB SG', type: 'aws_security_group', detail: 'port 5432', tf: 'aws_security_group', catName: 'Security' }, x: 300, y: 140 },
+            { resource: { id: 'kms', label: 'KMS Key', type: 'aws_kms_key', detail: 'db-encryption', tf: 'aws_kms_key', catName: 'Security' }, x: 540, y: 80 },
+        ],
+        's3-full': [
+            { resource: { id: 's3', label: 'S3', type: 'aws_s3_bucket', detail: 'private', tf: 'aws_s3_bucket', catName: 'Storage' }, x: 60, y: 60 },
+            { resource: { id: 'kms', label: 'KMS Key', type: 'aws_kms_key', detail: 'bucket-encryption', tf: 'aws_kms_key', catName: 'Security' }, x: 300, y: 20 },
+            { resource: { id: 'iam_policy', label: 'Bucket Policy', type: 'aws_s3_bucket_policy', detail: 'access control', tf: 'aws_s3_bucket_policy', catName: 'Security' }, x: 300, y: 140 },
+        ],
+        'alb-full': [
+            { resource: { id: 'alb', label: 'ALB', type: 'aws_lb', detail: 'internet-facing', tf: 'aws_lb', catName: 'Network' }, x: 60, y: 60 },
+            { resource: { id: 'sg', label: 'ALB SG', type: 'aws_security_group', detail: '80/443', tf: 'aws_security_group', catName: 'Security' }, x: 300, y: 20 },
+            { resource: { id: 'acm', label: 'SSL Cert', type: 'aws_acm_certificate', detail: '*.example.com', tf: 'aws_acm_certificate', catName: 'Security' }, x: 300, y: 140 },
+        ],
+        'iam-full': [
+            { resource: { id: 'iam_role', label: 'IAM Role', type: 'aws_iam_role', detail: 'service role', tf: 'aws_iam_role', catName: 'Security' }, x: 60, y: 60 },
+            { resource: { id: 'iam_policy', label: 'IAM Policy', type: 'aws_iam_policy', detail: 'least privilege', tf: 'aws_iam_policy', catName: 'Security' }, x: 300, y: 20 },
+            { resource: { id: 'cognito', label: 'Cognito', type: 'aws_cognito_user_pool', detail: 'user auth', tf: 'aws_cognito_user_pool', catName: 'Security' }, x: 300, y: 140 },
+        ],
+    };
+
     document.getElementById('module-catalog-btn')?.addEventListener('click', () => {
-        showToast('Module catalog coming soon', 'info');
+        document.getElementById('catalog-modal').classList.add('active');
     });
+
+    document.getElementById('catalog-modal-close')?.addEventListener('click', () => {
+        document.getElementById('catalog-modal').classList.remove('active');
+    });
+
+    // Catalog tabs
+    document.querySelectorAll('.catalog-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.catalog-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            // Filter could be implemented but all modules shown for now
+        });
+    });
+
+    // Catalog search
+    document.getElementById('catalog-search-input')?.addEventListener('input', (e) => {
+        const q = e.target.value.toLowerCase();
+        document.querySelectorAll('.catalog-card').forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.display = text.includes(q) ? '' : 'none';
+        });
+    });
+
+    // Use Module buttons
+    document.querySelectorAll('.btn-use-module').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const moduleId = btn.dataset.module;
+            const resources = moduleDefinitions[moduleId];
+            if (!resources) return;
+
+            document.getElementById('catalog-modal').classList.remove('active');
+            saveState();
+            canvasNodes = [];
+            connections = [];
+            canvasArea.querySelectorAll('.canvas-node').forEach(n => n.remove());
+            openDesigner();
+
+            let delay = 0;
+            resources.forEach(r => {
+                setTimeout(() => addNodeToCanvas(r.resource, r.x, r.y), delay);
+                delay += 200;
+            });
+
+            setTimeout(() => {
+                // Auto-connect sequentially
+                const ids = canvasNodes.map(n => n.id);
+                for (let i = 0; i < ids.length - 1; i++) {
+                    connections.push({
+                        id: `conn-${connectionIdCounter++}`,
+                        from: { nodeId: ids[i], port: 'right' },
+                        to: { nodeId: ids[i + 1], port: 'left' }
+                    });
+                }
+                drawConnections();
+                updateStatusBar();
+                saveToLocalStorage();
+                showToast(`Module loaded with ${resources.length} resources`, 'success');
+            }, delay + 300);
+        });
+    });
+
+    // ===== MODULE IMPORT =====
     document.getElementById('module-import-btn')?.addEventListener('click', () => {
-        showToast('Module import coming soon', 'info');
+        document.getElementById('module-import-modal').classList.add('active');
+    });
+
+    document.getElementById('module-import-modal-close')?.addEventListener('click', () => {
+        document.getElementById('module-import-modal').classList.remove('active');
+    });
+
+    document.getElementById('module-import-cancel')?.addEventListener('click', () => {
+        document.getElementById('module-import-modal').classList.remove('active');
+    });
+
+    document.getElementById('module-import-confirm')?.addEventListener('click', () => {
+        const source = document.getElementById('module-source-input')?.value.trim();
+        const version = document.getElementById('module-version-input')?.value.trim();
+        const name = document.getElementById('module-name-input')?.value.trim();
+
+        if (!source || !name) {
+            showToast('Please fill in Module Source and Name', 'warning');
+            return;
+        }
+
+        document.getElementById('module-import-modal').classList.remove('active');
+        openDesigner();
+
+        // Create a module node on canvas
+        saveState();
+        const moduleResource = {
+            id: 'module_' + name,
+            label: name,
+            type: 'module.' + name,
+            detail: source + (version ? ' v' + version : ''),
+            tf: 'module',
+            catName: 'Compute'
+        };
+        addNodeToCanvas(moduleResource, 200 + Math.random() * 200, 100 + Math.random() * 100);
+        showToast(`Module "${name}" imported from ${source}`, 'success');
     });
 
     // ===== INIT =====

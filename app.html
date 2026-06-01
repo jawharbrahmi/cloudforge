@@ -6,7 +6,7 @@
     <title>CloudForge | Visual Cloud Designer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="app.css?v=2">
+    <link rel="stylesheet" href="app.css?v=3">
 </head>
 <body>
     <div class="app-layout">
@@ -254,8 +254,8 @@
 
                     <!-- Canvas -->
                     <div class="canvas-container" id="canvas-container">
-                        <svg class="canvas-connections" id="canvas-svg"></svg>
                         <div class="canvas-area" id="canvas-area">
+                            <svg class="canvas-connections" id="canvas-svg"></svg>
                             <div class="canvas-empty" id="canvas-empty">
                                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
                                 <h3>Start designing your cloud</h3>
@@ -632,6 +632,113 @@
         <span class="cost-detail" id="cost-detail">0 resources</span>
     </div>
 
+    <!-- Module Catalog Modal -->
+    <div class="modal-overlay" id="catalog-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg> Module Catalog</h3>
+                <button class="modal-close" id="catalog-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="catalog-search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" placeholder="Search modules..." id="catalog-search-input">
+                </div>
+                <div class="catalog-tabs">
+                    <button class="catalog-tab active" data-ctab="popular">Popular</button>
+                    <button class="catalog-tab" data-ctab="networking">Networking</button>
+                    <button class="catalog-tab" data-ctab="compute">Compute</button>
+                    <button class="catalog-tab" data-ctab="database">Database</button>
+                    <button class="catalog-tab" data-ctab="security">Security</button>
+                </div>
+                <div class="catalog-grid" id="catalog-grid">
+                    <div class="catalog-card" data-module="vpc-full">
+                        <div class="catalog-card-header">
+                            <div class="catalog-icon" style="background:#ff9900;">VPC</div>
+                            <div><strong>terraform-aws-vpc</strong><span>terraform-aws-modules</span></div>
+                        </div>
+                        <p>Complete VPC with public/private subnets, NAT gateways, route tables, and flow logs.</p>
+                        <div class="catalog-meta"><span>v5.16.0</span><span>12.4M downloads</span></div>
+                        <button class="btn-use-module" data-module="vpc-full">Use Module</button>
+                    </div>
+                    <div class="catalog-card" data-module="eks">
+                        <div class="catalog-card-header">
+                            <div class="catalog-icon" style="background:#ff6b00;">EKS</div>
+                            <div><strong>terraform-aws-eks</strong><span>terraform-aws-modules</span></div>
+                        </div>
+                        <p>Managed Kubernetes cluster with node groups, IRSA, and cluster add-ons.</p>
+                        <div class="catalog-meta"><span>v20.8.0</span><span>8.2M downloads</span></div>
+                        <button class="btn-use-module" data-module="eks">Use Module</button>
+                    </div>
+                    <div class="catalog-card" data-module="rds-full">
+                        <div class="catalog-card-header">
+                            <div class="catalog-icon" style="background:#3b82f6;">RDS</div>
+                            <div><strong>terraform-aws-rds</strong><span>terraform-aws-modules</span></div>
+                        </div>
+                        <p>RDS instance or cluster with parameter groups, option groups, and enhanced monitoring.</p>
+                        <div class="catalog-meta"><span>v6.10.0</span><span>6.8M downloads</span></div>
+                        <button class="btn-use-module" data-module="rds-full">Use Module</button>
+                    </div>
+                    <div class="catalog-card" data-module="s3-full">
+                        <div class="catalog-card-header">
+                            <div class="catalog-icon" style="background:#10b981;">S3</div>
+                            <div><strong>terraform-aws-s3-bucket</strong><span>terraform-aws-modules</span></div>
+                        </div>
+                        <p>S3 bucket with versioning, encryption, lifecycle rules, and access logging.</p>
+                        <div class="catalog-meta"><span>v4.2.0</span><span>5.1M downloads</span></div>
+                        <button class="btn-use-module" data-module="s3-full">Use Module</button>
+                    </div>
+                    <div class="catalog-card" data-module="alb-full">
+                        <div class="catalog-card-header">
+                            <div class="catalog-icon" style="background:#8b5cf6;">ALB</div>
+                            <div><strong>terraform-aws-alb</strong><span>terraform-aws-modules</span></div>
+                        </div>
+                        <p>Application/Network Load Balancer with target groups, listeners, and SSL certificates.</p>
+                        <div class="catalog-meta"><span>v9.12.0</span><span>4.7M downloads</span></div>
+                        <button class="btn-use-module" data-module="alb-full">Use Module</button>
+                    </div>
+                    <div class="catalog-card" data-module="iam-full">
+                        <div class="catalog-card-header">
+                            <div class="catalog-icon" style="background:#ef4444;">IAM</div>
+                            <div><strong>terraform-aws-iam</strong><span>terraform-aws-modules</span></div>
+                        </div>
+                        <p>IAM roles, policies, users, groups, and OIDC providers with least-privilege patterns.</p>
+                        <div class="catalog-meta"><span>v5.48.0</span><span>9.3M downloads</span></div>
+                        <button class="btn-use-module" data-module="iam-full">Use Module</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Import Modal -->
+    <div class="modal-overlay" id="module-import-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Import Module</h3>
+                <button class="modal-close" id="module-import-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Module Source <span class="required">*</span></label>
+                    <input type="text" id="module-source-input" placeholder="e.g., terraform-aws-modules/vpc/aws">
+                </div>
+                <div class="form-group">
+                    <label>Version</label>
+                    <input type="text" id="module-version-input" placeholder="e.g., 5.16.0 (leave empty for latest)">
+                </div>
+                <div class="form-group">
+                    <label>Module Name <span class="required">*</span></label>
+                    <input type="text" id="module-name-input" placeholder="e.g., my_vpc">
+                </div>
+                <div class="form-actions">
+                    <button class="btn-secondary" id="module-import-cancel">Cancel</button>
+                    <button class="btn-primary-sm" id="module-import-confirm">Import Module</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Keyboard Shortcuts Overlay -->
     <div class="modal-overlay" id="shortcuts-modal">
         <div class="modal modal-lg shortcuts-panel">
@@ -709,6 +816,6 @@ resource "aws_s3_bucket" "data" {
     <!-- Toast -->
     <div class="toast-container" id="toast-container"></div>
 
-    <script src="app.js?v=2"></script>
+    <script src="app.js?v=3"></script>
 </body>
 </html>
