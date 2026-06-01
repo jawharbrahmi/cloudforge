@@ -1033,6 +1033,32 @@ body {
 
 .canvas-design-node:hover .design-node-delete { display: flex; }
 
+/* Container design node */
+.design-node-container {
+    width: 260px;
+    min-height: 160px;
+    border: 2px dashed var(--primary);
+    border-radius: var(--radius-lg);
+    background: rgba(99, 102, 241, 0.03);
+    overflow: hidden;
+}
+
+.design-node-container .container-header {
+    padding: 6px 14px;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.design-node-container .container-body {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+}
+
 /* Containers */
 .containers-list {
     display: grid;
@@ -2752,6 +2778,69 @@ body {
     0% { transform: scale(0.8); opacity: 0; }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); opacity: 1; }
+}
+
+/* ===== Diagram Upload ===== */
+.upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 16px;
+}
+
+.upload-zone:hover, .upload-zone.dragover {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+}
+
+.upload-zone h4 { font-size: 1rem; margin: 12px 0 4px; color: var(--text); }
+.upload-zone p { font-size: 0.85rem; color: var(--text-muted); }
+.upload-formats { font-size: 0.72rem; color: var(--text-muted); margin-top: 8px; display: block; }
+
+.upload-preview {
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.upload-preview img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+    background: var(--bg);
+    display: block;
+}
+
+.upload-preview-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+}
+
+.btn-remove-upload {
+    padding: 4px 12px;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    background: none;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-remove-upload:hover { background: var(--danger-bg); }
+
+.upload-options {
+    margin-bottom: 16px;
 }
 
 /* ===== Module Catalog ===== */

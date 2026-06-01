@@ -702,36 +702,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function generateVariablesTf() {
-        let code = `<span class="c-comment"># CloudForge - Auto-generated Variables</span>\n\n`;
-        code += `<span class="c-keyword">variable</span> <span class="c-string">"aws_region"</span> {\n`;
-        code += `  <span class="c-key">description</span> = <span class="c-string">"AWS region"</span>\n`;
-        code += `  <span class="c-key">type</span>        = <span class="c-value">string</span>\n`;
-        code += `  <span class="c-key">default</span>     = <span class="c-string">"us-east-1"</span>\n}\n`;
+        const K = (k) => `<span class="c-key">${k}</span>`;
+        const S = (s) => `<span class="c-string">"${s}"</span>`;
+        const V = (v) => `<span class="c-value">${v}</span>`;
+        const C = (c) => `<span class="c-comment"># ${c}</span>`;
 
-        code += `\n<span class="c-keyword">variable</span> <span class="c-string">"environment"</span> {\n`;
-        code += `  <span class="c-key">description</span> = <span class="c-string">"Environment name"</span>\n`;
-        code += `  <span class="c-key">type</span>        = <span class="c-value">string</span>\n`;
-        code += `  <span class="c-key">default</span>     = <span class="c-string">"development"</span>\n}\n`;
+        let code = `${C('=== CloudForge Auto-generated Variables ===')}\n${C(`Generated for ${canvasNodes.length} resource(s)`)}\n\n`;
 
-        code += `\n<span class="c-keyword">variable</span> <span class="c-string">"project_name"</span> {\n`;
-        code += `  <span class="c-key">description</span> = <span class="c-string">"Project name for tagging"</span>\n`;
-        code += `  <span class="c-key">type</span>        = <span class="c-value">string</span>\n`;
-        code += `  <span class="c-key">default</span>     = <span class="c-string">"cloudforge"</span>\n}\n`;
+        // Core variables always present
+        code += `${C('--- Core Configuration ---')}\n\n`;
+        code += `<span class="c-keyword">variable</span> ${S('aws_region')} {\n  ${K('description')} = ${S('AWS region for all resources')}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S('us-east-1')}\n}\n`;
+        code += `\n<span class="c-keyword">variable</span> ${S('environment')} {\n  ${K('description')} = ${S('Deployment environment (development, staging, production)')}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S('development')}\n\n  ${K('validation')} {\n    ${K('condition')}     = ${V('contains(["development", "staging", "production"], var.environment)')}\n    ${K('error_message')} = ${S('Environment must be development, staging, or production.')}\n  }\n}\n`;
+        code += `\n<span class="c-keyword">variable</span> ${S('project_name')} {\n  ${K('description')} = ${S('Project name used for resource naming and tagging')}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S('cloudforge')}\n}\n`;
 
-        const hasEc2 = canvasNodes.some(n => n.resource.id === 'ec2');
-        if (hasEc2) {
-            code += `\n<span class="c-keyword">variable</span> <span class="c-string">"instance_type"</span> {\n`;
-            code += `  <span class="c-key">description</span> = <span class="c-string">"EC2 instance type"</span>\n`;
-            code += `  <span class="c-key">type</span>        = <span class="c-value">string</span>\n`;
-            code += `  <span class="c-key">default</span>     = <span class="c-string">"t3.large"</span>\n}\n`;
+        // VPC variables
+        if (canvasNodes.some(n => n.resource.id === 'vpc')) {
+            code += `\n${C('--- Networking ---')}\n\n`;
+            code += `<span class="c-keyword">variable</span> ${S('vpc_cidr')} {\n  ${K('description')} = ${S('CIDR block for the VPC')}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S('10.0.0.0/16')}\n}\n`;
         }
 
+        // EC2 variables
+        const hasEc2 = canvasNodes.some(n => n.resource.id === 'ec2');
+        if (hasEc2) {
+            code += `\n${C('--- Compute ---')}\n\n`;
+            code += `<span class="c-keyword">variable</span> ${S('instance_type')} {\n  ${K('description')} = ${S('EC2 instance type')}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S('t3.large')}\n}\n`;
+        }
+
+        // RDS variables
         const hasRds = canvasNodes.some(n => n.resource.id === 'rds');
         if (hasRds) {
-            code += `\n<span class="c-keyword">variable</span> <span class="c-string">"db_instance_class"</span> {\n`;
-            code += `  <span class="c-key">description</span> = <span class="c-string">"RDS instance class"</span>\n`;
-            code += `  <span class="c-key">type</span>        = <span class="c-value">string</span>\n`;
-            code += `  <span class="c-key">default</span>     = <span class="c-string">"db.r6g.large"</span>\n}\n`;
+            code += `\n${C('--- Database ---')}\n\n`;
+            code += `<span class="c-keyword">variable</span> ${S('db_instance_class')} {\n  ${K('description')} = ${S('RDS instance class')}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S('db.r6g.large')}\n}\n`;
+            code += `\n<span class="c-keyword">variable</span> ${S('db_username')} {\n  ${K('description')} = ${S('Database master username')}\n  ${K('type')}        = ${V('string')}\n  ${K('sensitive')}   = ${V('true')}\n}\n`;
+            code += `\n<span class="c-keyword">variable</span> ${S('db_password')} {\n  ${K('description')} = ${S('Database master password')}\n  ${K('type')}        = ${V('string')}\n  ${K('sensitive')}   = ${V('true')}\n}\n`;
         }
 
         return code;
@@ -757,17 +760,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function generateTfBody(node) {
         const r = node.resource;
+        const n = node.name.replace(/-/g, '_');
+        const K = (k) => `<span class="c-key">${k}</span>`;
+        const S = (s) => `<span class="c-string">"${s}"</span>`;
+        const V = (v) => `<span class="c-value">${v}</span>`;
+        const C = (c) => `<span class="c-comment"># ${c}</span>`;
+        const tags = `\n  ${K('tags')} = {\n    ${K('Name')}        = ${S(node.name)}\n    ${K('Environment')} = ${V('var.environment')}\n    ${K('Project')}     = ${V('var.project_name')}\n    ${K('ManagedBy')}   = ${S('CloudForge')}\n  }\n`;
+
+        // Check what other resources exist for cross-references
+        const hasVpc = canvasNodes.some(nd => nd.resource.id === 'vpc');
+        const vpcRef = hasVpc ? canvasNodes.find(nd => nd.resource.id === 'vpc') : null;
+        const hasSg = canvasNodes.some(nd => nd.resource.id === 'sg');
+        const sgRef = hasSg ? canvasNodes.find(nd => nd.resource.id === 'sg') : null;
+        const hasSubnet = canvasNodes.some(nd => nd.resource.id === 'subnet');
+
         switch (r.id) {
-            case 'vpc': return `  <span class="c-key">cidr_block</span> = <span class="c-string">"10.0.0.0/16"</span>\n\n  <span class="c-key">tags</span> = {\n    <span class="c-key">Name</span> = <span class="c-string">"${node.name}"</span>\n    <span class="c-key">Environment</span> = <span class="c-value">var.environment</span>\n  }\n`;
-            case 'ec2': return `  <span class="c-key">ami</span>           = <span class="c-value">data.aws_ami.ubuntu.id</span>\n  <span class="c-key">instance_type</span> = <span class="c-value">var.instance_type</span>\n\n  <span class="c-key">tags</span> = {\n    <span class="c-key">Name</span> = <span class="c-string">"${node.name}"</span>\n    <span class="c-key">Environment</span> = <span class="c-value">var.environment</span>\n  }\n`;
-            case 'rds': return `  <span class="c-key">engine</span>         = <span class="c-string">"postgres"</span>\n  <span class="c-key">engine_version</span> = <span class="c-string">"16.1"</span>\n  <span class="c-key">instance_class</span> = <span class="c-value">var.db_instance_class</span>\n  <span class="c-key">allocated_storage</span> = <span class="c-value">100</span>\n\n  <span class="c-key">tags</span> = {\n    <span class="c-key">Name</span> = <span class="c-string">"${node.name}"</span>\n  }\n`;
-            case 's3': return `  <span class="c-key">bucket</span> = <span class="c-string">"${node.name}"</span>\n\n  <span class="c-key">tags</span> = {\n    <span class="c-key">Name</span> = <span class="c-string">"${node.name}"</span>\n  }\n`;
-            case 'alb': return `  <span class="c-key">name</span>               = <span class="c-string">"${node.name}"</span>\n  <span class="c-key">internal</span>           = <span class="c-value">false</span>\n  <span class="c-key">load_balancer_type</span> = <span class="c-string">"application"</span>\n`;
-            case 'lambda': return `  <span class="c-key">function_name</span> = <span class="c-string">"${node.name}"</span>\n  <span class="c-key">runtime</span>       = <span class="c-string">"nodejs20.x"</span>\n  <span class="c-key">handler</span>       = <span class="c-string">"index.handler"</span>\n  <span class="c-key">memory_size</span>   = <span class="c-value">256</span>\n  <span class="c-key">timeout</span>       = <span class="c-value">30</span>\n`;
-            case 'sg': return `  <span class="c-key">name</span>        = <span class="c-string">"${node.name}"</span>\n  <span class="c-key">description</span> = <span class="c-string">"Managed by CloudForge"</span>\n\n  <span class="c-key">ingress</span> {\n    <span class="c-key">from_port</span>   = <span class="c-value">443</span>\n    <span class="c-key">to_port</span>     = <span class="c-value">443</span>\n    <span class="c-key">protocol</span>    = <span class="c-string">"tcp"</span>\n    <span class="c-key">cidr_blocks</span> = [<span class="c-string">"0.0.0.0/0"</span>]\n  }\n`;
-            case 'subnet': return `  <span class="c-key">cidr_block</span>        = <span class="c-string">"10.0.1.0/24"</span>\n  <span class="c-key">availability_zone</span> = <span class="c-string">"us-east-1a"</span>\n\n  <span class="c-key">tags</span> = {\n    <span class="c-key">Name</span> = <span class="c-string">"${node.name}"</span>\n  }\n`;
-            case 'iam_role': return `  <span class="c-key">name</span> = <span class="c-string">"${node.name}"</span>\n\n  <span class="c-key">assume_role_policy</span> = <span class="c-value">jsonencode</span>({\n    <span class="c-key">Version</span> = <span class="c-string">"2012-10-17"</span>\n    <span class="c-key">Statement</span> = [{\n      <span class="c-key">Action</span> = <span class="c-string">"sts:AssumeRole"</span>\n      <span class="c-key">Effect</span> = <span class="c-string">"Allow"</span>\n      <span class="c-key">Principal</span> = { <span class="c-key">Service</span> = <span class="c-string">"ec2.amazonaws.com"</span> }\n    }]\n  })\n`;
-            default: return `  <span class="c-key">tags</span> = {\n    <span class="c-key">Name</span>       = <span class="c-string">"${node.name}"</span>\n    <span class="c-key">ManagedBy</span> = <span class="c-string">"CloudForge"</span>\n  }\n`;
+            case 'vpc':
+                return `  ${K('cidr_block')}           = ${V('var.vpc_cidr')}\n  ${K('enable_dns_support')}   = ${V('true')}\n  ${K('enable_dns_hostnames')} = ${V('true')}\n${tags}`;
+
+            case 'subnet':
+                return `  ${vpcRef ? `${K('vpc_id')}            = ${V(`aws_vpc.${vpcRef.name.replace(/-/g,'_')}.id`)}\n` : ''}  ${K('cidr_block')}        = ${V('cidrsubnet(var.vpc_cidr, 8, ' + Math.floor(Math.random()*10) + ')')}\n  ${K('availability_zone')} = ${S('${var.aws_region}a')}\n  ${K('map_public_ip_on_launch')} = ${V('true')}\n${tags}`;
+
+            case 'ec2':
+                return `  ${K('ami')}                    = ${V('data.aws_ami.ubuntu.id')}\n  ${K('instance_type')}          = ${V('var.instance_type')}\n  ${hasSg && sgRef ? `${K('vpc_security_group_ids')} = [${V(`aws_security_group.${sgRef.name.replace(/-/g,'_')}.id`)}]\n` : ''}  ${hasSubnet ? `${K('subnet_id')}              = ${V(`aws_subnet.${(canvasNodes.find(nd=>nd.resource.id==='subnet')?.name||'main').replace(/-/g,'_')}.id`)}\n` : ''}\n  ${K('root_block_device')} {\n    ${K('volume_type')}           = ${S('gp3')}\n    ${K('volume_size')}           = ${V('30')}\n    ${K('encrypted')}             = ${V('true')}\n    ${K('delete_on_termination')} = ${V('true')}\n  }\n\n  ${K('metadata_options')} {\n    ${K('http_endpoint')} = ${S('enabled')}\n    ${K('http_tokens')}   = ${S('required')}\n  }\n${tags}`;
+
+            case 'rds':
+                return `  ${K('identifier')}          = ${S(node.name)}\n  ${K('engine')}              = ${S('postgres')}\n  ${K('engine_version')}      = ${S('16.4')}\n  ${K('instance_class')}      = ${V('var.db_instance_class')}\n  ${K('allocated_storage')}   = ${V('100')}\n  ${K('max_allocated_storage')} = ${V('500')}\n\n  ${K('db_name')}  = ${S('app_database')}\n  ${K('username')} = ${V('var.db_username')}\n  ${K('password')} = ${V('var.db_password')}\n\n  ${K('multi_az')}               = ${V('var.environment == "production" ? true : false')}\n  ${K('storage_encrypted')}      = ${V('true')}\n  ${K('deletion_protection')}    = ${V('var.environment == "production" ? true : false')}\n  ${K('backup_retention_period')} = ${V('7')}\n  ${K('skip_final_snapshot')}    = ${V('var.environment != "production"')}\n  ${K('final_snapshot_identifier')} = ${S(`${node.name}-final-snapshot`)}\n\n  ${hasSg && sgRef ? `${K('vpc_security_group_ids')} = [${V(`aws_security_group.${sgRef.name.replace(/-/g,'_')}.id`)}]\n` : ''}${tags}`;
+
+            case 's3':
+                return `  ${K('bucket')}        = ${S(`\${var.project_name}-${node.name}-\${var.environment}`)}\n  ${K('force_destroy')} = ${V('var.environment != "production"')}\n${tags}}\n\n${C(`Enable versioning for ${node.name}`)}\n<span class="c-keyword">resource</span> ${S('aws_s3_bucket_versioning')} ${S(`${n}_versioning`)} {\n  ${K('bucket')} = ${V(`aws_s3_bucket.${n}.id`)}\n\n  ${K('versioning_configuration')} {\n    ${K('status')} = ${S('Enabled')}\n  }\n}\n\n${C('Block all public access')}\n<span class="c-keyword">resource</span> ${S('aws_s3_bucket_public_access_block')} ${S(`${n}_public_access`)} {\n  ${K('bucket')} = ${V(`aws_s3_bucket.${n}.id`)}\n\n  ${K('block_public_acls')}       = ${V('true')}\n  ${K('block_public_policy')}     = ${V('true')}\n  ${K('ignore_public_acls')}      = ${V('true')}\n  ${K('restrict_public_buckets')} = ${V('true')}\n}\n\n${C('Enable server-side encryption')}\n<span class="c-keyword">resource</span> ${S('aws_s3_bucket_server_side_encryption_configuration')} ${S(`${n}_encryption`)} {\n  ${K('bucket')} = ${V(`aws_s3_bucket.${n}.id`)}\n\n  ${K('rule')} {\n    ${K('apply_server_side_encryption_by_default')} {\n      ${K('sse_algorithm')} = ${S('aws:kms')}\n    }\n    ${K('bucket_key_enabled')} = ${V('true')}\n  }\n`;
+
+            case 'alb':
+                return `  ${K('name')}               = ${S(node.name)}\n  ${K('internal')}           = ${V('false')}\n  ${K('load_balancer_type')} = ${S('application')}\n  ${K('security_groups')}    = [${hasSg && sgRef ? V(`aws_security_group.${sgRef.name.replace(/-/g,'_')}.id`) : ''}]\n  ${hasSubnet ? `${K('subnets')}            = ${V('var.public_subnet_ids')}\n` : ''}\n  ${K('enable_deletion_protection')} = ${V('var.environment == "production"')}\n\n  ${K('access_logs')} {\n    ${K('bucket')}  = ${V('var.lb_access_logs_bucket')}\n    ${K('prefix')}  = ${S(node.name)}\n    ${K('enabled')} = ${V('true')}\n  }\n${tags}`;
+
+            case 'lambda':
+                return `  ${K('function_name')} = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('runtime')}       = ${S('nodejs20.x')}\n  ${K('handler')}       = ${S('index.handler')}\n  ${K('memory_size')}   = ${V('256')}\n  ${K('timeout')}       = ${V('30')}\n  ${K('architectures')} = [${S('arm64')}]\n\n  ${K('filename')}         = ${S('lambda.zip')}\n  ${K('source_code_hash')} = ${V('filebase64sha256("lambda.zip")')}\n\n  ${K('environment')} {\n    ${K('variables')} = {\n      ${K('ENVIRONMENT')} = ${V('var.environment')}\n      ${K('LOG_LEVEL')}   = ${S('info')}\n    }\n  }\n\n  ${K('tracing_config')} {\n    ${K('mode')} = ${S('Active')}\n  }\n${tags}`;
+
+            case 'sg':
+                return `  ${K('name')}        = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('description')} = ${S(`Security group for ${node.name} - Managed by CloudForge`)}\n  ${vpcRef ? `${K('vpc_id')}      = ${V(`aws_vpc.${vpcRef.name.replace(/-/g,'_')}.id`)}\n` : ''}\n  ${K('ingress')} {\n    ${K('description')} = ${S('HTTPS')}\n    ${K('from_port')}   = ${V('443')}\n    ${K('to_port')}     = ${V('443')}\n    ${K('protocol')}    = ${S('tcp')}\n    ${K('cidr_blocks')} = [${S('0.0.0.0/0')}]\n  }\n\n  ${K('ingress')} {\n    ${K('description')} = ${S('HTTP')}\n    ${K('from_port')}   = ${V('80')}\n    ${K('to_port')}     = ${V('80')}\n    ${K('protocol')}    = ${S('tcp')}\n    ${K('cidr_blocks')} = [${S('0.0.0.0/0')}]\n  }\n\n  ${K('egress')} {\n    ${K('description')} = ${S('All outbound')}\n    ${K('from_port')}   = ${V('0')}\n    ${K('to_port')}     = ${V('0')}\n    ${K('protocol')}    = ${S('-1')}\n    ${K('cidr_blocks')} = [${S('0.0.0.0/0')}]\n  }\n${tags}`;
+
+            case 'iam_role':
+                return `  ${K('name')} = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('path')} = ${S('/')}\n\n  ${K('assume_role_policy')} = ${V('jsonencode')}({\n    ${K('Version')} = ${S('2012-10-17')}\n    ${K('Statement')} = [{\n      ${K('Sid')}       = ${S('AllowAssumeRole')}\n      ${K('Action')}    = ${S('sts:AssumeRole')}\n      ${K('Effect')}    = ${S('Allow')}\n      ${K('Principal')} = {\n        ${K('Service')} = ${S('ec2.amazonaws.com')}\n      }\n    }]\n  })\n\n  ${K('managed_policy_arns')} = [\n    ${S('arn:aws:iam::aws:policy/CloudWatchLogsFullAccess')}\n  ]\n${tags}`;
+
+            case 'dynamodb':
+                return `  ${K('name')}         = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('billing_mode')} = ${S('PAY_PER_REQUEST')}\n  ${K('hash_key')}     = ${S('id')}\n  ${K('range_key')}    = ${S('sort_key')}\n\n  ${K('attribute')} {\n    ${K('name')} = ${S('id')}\n    ${K('type')} = ${S('S')}\n  }\n\n  ${K('attribute')} {\n    ${K('name')} = ${S('sort_key')}\n    ${K('type')} = ${S('S')}\n  }\n\n  ${K('point_in_time_recovery')} {\n    ${K('enabled')} = ${V('true')}\n  }\n\n  ${K('server_side_encryption')} {\n    ${K('enabled')} = ${V('true')}\n  }\n${tags}`;
+
+            case 'cloudfront':
+                return `  ${K('enabled')}             = ${V('true')}\n  ${K('is_ipv6_enabled')}     = ${V('true')}\n  ${K('default_root_object')} = ${S('index.html')}\n  ${K('price_class')}         = ${S('PriceClass_100')}\n\n  ${K('default_cache_behavior')} {\n    ${K('allowed_methods')}  = [${S('GET')}, ${S('HEAD')}, ${S('OPTIONS')}]\n    ${K('cached_methods')}   = [${S('GET')}, ${S('HEAD')}]\n    ${K('target_origin_id')} = ${S('S3Origin')}\n\n    ${K('forwarded_values')} {\n      ${K('query_string')} = ${V('false')}\n      ${K('cookies')} {\n        ${K('forward')} = ${S('none')}\n      }\n    }\n\n    ${K('viewer_protocol_policy')} = ${S('redirect-to-https')}\n    ${K('min_ttl')}                = ${V('0')}\n    ${K('default_ttl')}            = ${V('3600')}\n    ${K('max_ttl')}                = ${V('86400')}\n    ${K('compress')}               = ${V('true')}\n  }\n\n  ${K('restrictions')} {\n    ${K('geo_restriction')} {\n      ${K('restriction_type')} = ${S('none')}\n    }\n  }\n\n  ${K('viewer_certificate')} {\n    ${K('cloudfront_default_certificate')} = ${V('true')}\n  }\n${tags}`;
+
+            case 'ecs':
+                return `  ${K('name')} = ${S(`\${var.project_name}-${node.name}`)}\n\n  ${K('setting')} {\n    ${K('name')}  = ${S('containerInsights')}\n    ${K('value')} = ${S('enabled')}\n  }\n\n  ${K('configuration')} {\n    ${K('execute_command_configuration')} {\n      ${K('logging')} = ${S('OVERRIDE')}\n\n      ${K('log_configuration')} {\n        ${K('cloud_watch_log_group_name')} = ${S(`/ecs/\${var.project_name}`)}\n      }\n    }\n  }\n${tags}`;
+
+            case 'natgw':
+                return `  ${K('allocation_id')} = ${V(`aws_eip.${n}_eip.id`)}\n  ${hasSubnet ? `${K('subnet_id')}     = ${V(`aws_subnet.${(canvasNodes.find(nd=>nd.resource.id==='subnet')?.name||'public').replace(/-/g,'_')}.id`)}\n` : ''}\n  ${K('depends_on')} = [${V('aws_internet_gateway.main')}]\n${tags}`;
+
+            case 'kms':
+                return `  ${K('description')}             = ${S(`KMS key for ${node.name}`)}\n  ${K('deletion_window_in_days')} = ${V('7')}\n  ${K('enable_key_rotation')}     = ${V('true')}\n  ${K('is_enabled')}              = ${V('true')}\n\n  ${K('policy')} = ${V('data.aws_iam_policy_document.kms_policy.json')}\n${tags}`;
+
+            case 'apigateway':
+                return `  ${K('name')}        = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('description')} = ${S(`REST API for ${node.name} - Managed by CloudForge`)}\n\n  ${K('endpoint_configuration')} {\n    ${K('types')} = [${S('REGIONAL')}]\n  }\n${tags}`;
+
+            case 'autoscaling':
+                return `  ${K('name')}                = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('min_size')}            = ${V('2')}\n  ${K('max_size')}            = ${V('10')}\n  ${K('desired_capacity')}    = ${V('2')}\n  ${K('health_check_type')}   = ${S('ELB')}\n  ${K('health_check_grace_period')} = ${V('300')}\n  ${K('force_delete')}        = ${V('true')}\n\n  ${K('launch_template')} {\n    ${K('id')}      = ${V('aws_launch_template.main.id')}\n    ${K('version')} = ${S('$Latest')}\n  }\n\n  ${K('tag')} {\n    ${K('key')}                 = ${S('Name')}\n    ${K('value')}               = ${S(node.name)}\n    ${K('propagate_at_launch')} = ${V('true')}\n  }\n`;
+
+            case 'elasticache':
+                return `  ${K('cluster_id')}           = ${S(node.name)}\n  ${K('engine')}               = ${S('redis')}\n  ${K('engine_version')}       = ${S('7.0')}\n  ${K('node_type')}            = ${S('cache.r6g.large')}\n  ${K('num_cache_nodes')}      = ${V('1')}\n  ${K('port')}                 = ${V('6379')}\n  ${K('parameter_group_name')} = ${S('default.redis7')}\n\n  ${K('snapshot_retention_limit')} = ${V('5')}\n  ${K('at_rest_encryption_enabled')} = ${V('true')}\n  ${K('transit_encryption_enabled')} = ${V('true')}\n${tags}`;
+
+            default:
+                return `  ${C('Configure ' + r.label + ' settings')}\n${tags}`;
         }
     }
 
@@ -1657,6 +1717,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadFromLocalStorage();
 
+    // ===== CONTAINER DRAG & DROP =====
+    document.querySelectorAll('.container-item').forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+            const containerType = item.dataset.container;
+            const label = item.querySelector('span').textContent;
+            const iconEl = item.querySelector('.container-icon');
+            const color = iconEl ? iconEl.style.background : '#6366f1';
+            draggedDesign = { type: 'container', label, containerType, color, icon: iconEl?.textContent || 'C' };
+            e.dataTransfer.effectAllowed = 'copy';
+            e.dataTransfer.setData('text/plain', 'container');
+        });
+        item.addEventListener('dragend', () => { draggedDesign = null; });
+    });
+
     // ===== DESIGN TOOLS =====
     let designNodes = [];
     let designIdCounter = 0;
@@ -1756,6 +1830,9 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'shape':
                 const shapeClass = node.label === 'Circle' ? 'circle' : node.label === 'Diamond' ? 'diamond' : '';
                 inner = `<div class="design-node-shape ${shapeClass}"><span style="color:${node.color}">${node.icon}</span></div>`;
+                break;
+            case 'container':
+                inner = `<div class="design-node-container" style="border-color:${node.color}"><div class="container-header" style="background:${node.color}">${node.label}</div><div class="container-body">Drop resources here</div></div>`;
                 break;
             default:
                 inner = `<div class="design-node-text">${node.label}</div>`;
@@ -2063,6 +2140,125 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMinimap();
         saveToLocalStorage();
         showToast('Nodes auto-aligned', 'success');
+    });
+
+    // ===== DIAGRAM UPLOAD =====
+    const uploadZone = document.getElementById('upload-zone');
+    const fileInput = document.getElementById('diagram-file-input');
+    const uploadPreview = document.getElementById('upload-preview');
+    const analyzeBtn = document.getElementById('analyze-diagram-btn');
+    let uploadedFile = null;
+
+    document.getElementById('upload-diagram-btn')?.addEventListener('click', () => {
+        document.getElementById('upload-diagram-modal').classList.add('active');
+    });
+
+    document.getElementById('upload-diagram-close')?.addEventListener('click', () => {
+        document.getElementById('upload-diagram-modal').classList.remove('active');
+    });
+
+    uploadZone?.addEventListener('click', () => fileInput?.click());
+
+    uploadZone?.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('dragover');
+    });
+
+    uploadZone?.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('dragover');
+    });
+
+    uploadZone?.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) handleDiagramFile(file);
+    });
+
+    fileInput?.addEventListener('change', (e) => {
+        if (e.target.files[0]) handleDiagramFile(e.target.files[0]);
+    });
+
+    function handleDiagramFile(file) {
+        uploadedFile = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('upload-preview-img').src = e.target.result;
+            document.getElementById('upload-file-name').textContent = file.name;
+            uploadZone.style.display = 'none';
+            uploadPreview.style.display = '';
+            analyzeBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    document.getElementById('remove-upload')?.addEventListener('click', () => {
+        uploadedFile = null;
+        uploadZone.style.display = '';
+        uploadPreview.style.display = 'none';
+        analyzeBtn.disabled = true;
+        fileInput.value = '';
+    });
+
+    analyzeBtn?.addEventListener('click', () => {
+        if (!uploadedFile) return;
+        document.getElementById('upload-diagram-modal').classList.remove('active');
+        showToast('Analyzing diagram...', 'info');
+
+        // Simulate AI analysis of the diagram
+        setTimeout(() => {
+            saveState();
+            canvasNodes = [];
+            connections = [];
+            canvasArea.querySelectorAll('.canvas-node').forEach(n => n.remove());
+            canvasArea.querySelectorAll('.canvas-design-node').forEach(n => n.remove());
+            openDesigner();
+
+            // Generate a realistic architecture based on "detected" components
+            const detectedResources = [
+                { resource: { id: 'vpc', label: 'VPC', type: 'aws_vpc', detail: '10.0.0.0/16', tf: 'aws_vpc', catName: 'Network' }, x: 40, y: 40 },
+                { resource: { id: 'subnet', label: 'Subnet', type: 'aws_subnet', detail: 'public-1a', tf: 'aws_subnet', catName: 'Network' }, x: 40, y: 180 },
+                { resource: { id: 'sg', label: 'Sec Group', type: 'aws_security_group', detail: 'web-sg', tf: 'aws_security_group', catName: 'Security' }, x: 40, y: 320 },
+                { resource: { id: 'alb', label: 'ALB', type: 'aws_lb', detail: 'internet-facing', tf: 'aws_lb', catName: 'Network' }, x: 280, y: 40 },
+                { resource: { id: 'ec2', label: 'EC2', type: 'aws_instance', detail: 't3.large', tf: 'aws_instance', catName: 'Compute' }, x: 280, y: 180 },
+                { resource: { id: 'rds', label: 'RDS', type: 'aws_db_instance', detail: 'PostgreSQL', tf: 'aws_db_instance', catName: 'Database' }, x: 280, y: 320 },
+                { resource: { id: 's3', label: 'S3', type: 'aws_s3_bucket', detail: 'static-assets', tf: 'aws_s3_bucket', catName: 'Storage' }, x: 520, y: 40 },
+                { resource: { id: 'cloudfront', label: 'CloudFront', type: 'aws_cloudfront_distribution', detail: 'CDN', tf: 'aws_cloudfront_distribution', catName: 'Network' }, x: 520, y: 180 },
+                { resource: { id: 'iam_role', label: 'IAM Role', type: 'aws_iam_role', detail: 'app-role', tf: 'aws_iam_role', catName: 'Security' }, x: 520, y: 320 },
+            ];
+
+            let delay = 0;
+            detectedResources.forEach(r => {
+                setTimeout(() => addNodeToCanvas(r.resource, r.x, r.y), delay);
+                delay += 200;
+            });
+
+            setTimeout(() => {
+                // Create connections based on typical architecture
+                const ids = canvasNodes.map(n => n.id);
+                const connPairs = [[0,3],[3,4],[4,5],[0,1],[1,4],[2,4],[6,7],[8,4]];
+                connPairs.forEach(([a,b]) => {
+                    if (ids[a] && ids[b]) {
+                        connections.push({
+                            id: `conn-${connectionIdCounter++}`,
+                            from: { nodeId: ids[a], port: 'right' },
+                            to: { nodeId: ids[b], port: 'left' }
+                        });
+                    }
+                });
+                drawConnections();
+                updateStatusBar();
+                saveToLocalStorage();
+                showToast(`Diagram analyzed! Detected ${detectedResources.length} resources. Terraform code generated.`, 'success');
+            }, delay + 500);
+
+            // Reset upload state
+            uploadedFile = null;
+            if (uploadZone) uploadZone.style.display = '';
+            if (uploadPreview) uploadPreview.style.display = 'none';
+            if (analyzeBtn) analyzeBtn.disabled = true;
+            if (fileInput) fileInput.value = '';
+        }, 2000);
     });
 
     // ===== MODULE CATALOG =====

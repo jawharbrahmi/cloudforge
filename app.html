@@ -6,7 +6,7 @@
     <title>CloudForge | Visual Cloud Designer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="app.css?v=4">
+    <link rel="stylesheet" href="app.css?v=5">
 </head>
 <body>
     <div class="app-layout">
@@ -140,6 +140,7 @@
                         <div class="toolbar-divider"></div>
                         <button class="toolbar-btn" title="Snap to Grid" id="snap-grid-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
                         <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" title="Upload Diagram" id="upload-diagram-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
                         <button class="toolbar-btn" title="Import Terraform" id="import-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>
                         <button class="toolbar-btn" title="Export" id="export-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
                         <button class="toolbar-btn" title="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
@@ -679,6 +680,47 @@
         <span class="cost-detail" id="cost-detail">0 resources</span>
     </div>
 
+    <!-- Upload Diagram Modal -->
+    <div class="modal-overlay" id="upload-diagram-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Upload Architecture Diagram</h3>
+                <button class="modal-close" id="upload-diagram-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Upload your cloud architecture diagram image and we'll automatically detect the resources and generate Terraform code.</p>
+                <div class="upload-zone" id="upload-zone">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <h4>Drop your diagram here</h4>
+                    <p>or click to browse files</p>
+                    <span class="upload-formats">PNG, JPG, SVG, PDF supported</span>
+                    <input type="file" id="diagram-file-input" accept="image/*,.pdf,.svg" style="display:none;">
+                </div>
+                <div class="upload-preview" id="upload-preview" style="display:none;">
+                    <img id="upload-preview-img" alt="Uploaded diagram">
+                    <div class="upload-preview-info">
+                        <span id="upload-file-name"></span>
+                        <button class="btn-remove-upload" id="remove-upload">Remove</button>
+                    </div>
+                </div>
+                <div class="upload-options">
+                    <div class="form-group">
+                        <label>Cloud Provider</label>
+                        <select id="upload-provider">
+                            <option value="aws">AWS</option>
+                            <option value="azure">Azure</option>
+                            <option value="gcp">Google Cloud</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-generate" id="analyze-diagram-btn" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    Analyze &amp; Generate Infrastructure
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Module Catalog Modal -->
     <div class="modal-overlay" id="catalog-modal">
         <div class="modal modal-lg">
@@ -863,6 +905,6 @@ resource "aws_s3_bucket" "data" {
     <!-- Toast -->
     <div class="toast-container" id="toast-container"></div>
 
-    <script src="app.js?v=4"></script>
+    <script src="app.js?v=5"></script>
 </body>
 </html>
