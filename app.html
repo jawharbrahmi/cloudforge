@@ -6,7 +6,7 @@
     <title>CloudForge | Visual Cloud Designer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="app.css?v=5">
+    <link rel="stylesheet" href="app.css?v=6">
 </head>
 <body>
     <div class="app-layout">
@@ -290,13 +290,7 @@
                         </div>
 
                         <div class="res-tab-content" id="tab-templates">
-                            <div class="template-categories">
-                                <div class="template-cat"><span>Web, API & Apps</span><a href="#">See all</a></div>
-                                <div class="template-cat"><span>Data & Storage</span><a href="#">See all</a></div>
-                                <div class="template-cat"><span>Events & Workflows</span><a href="#">See all</a></div>
-                                <div class="template-cat"><span>Infra & Resilience</span><a href="#">See all</a></div>
-                                <div class="template-cat"><span>Security & IAM</span><a href="#">See all</a></div>
-                            </div>
+                            <div class="template-categories" id="sidebar-template-categories"></div>
                         </div>
                     </div>
 
@@ -905,6 +899,6 @@ resource "aws_s3_bucket" "data" {
     <!-- Toast -->
     <div class="toast-container" id="toast-container"></div>
 
-    <script src="app.js?v=5"></script>
+    <script src="app.js?v=6"></script>
 </body>
 </html>

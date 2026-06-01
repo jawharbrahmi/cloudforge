@@ -1395,6 +1395,109 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderTemplates();
 
+    // ===== SIDEBAR TEMPLATE CATEGORIES =====
+    const sidebarTemplateData = [
+        {
+            name: 'Web, API & Apps', templates: [
+                { name: 'Web App + ALB + ASG', tags: ['EC2','ALB','ASG'], color: '#ff6b00', tplName: 'Web App with ALB & Auto Scaling' },
+                { name: 'Serverless REST API', tags: ['Lambda','API GW','DynamoDB'], color: '#f59e0b', tplName: 'Serverless API' },
+                { name: 'ECS Fargate App', tags: ['ECS','ALB','RDS'], color: '#3b82f6', tplName: 'Container Platform (ECS)' },
+            ]
+        },
+        {
+            name: 'Data & Storage', templates: [
+                { name: 'S3 Data Lake', tags: ['S3','KMS','IAM'], color: '#10b981', tplName: 'Data Lake' },
+                { name: 'RDS PostgreSQL', tags: ['RDS','VPC','SG'], color: '#8b5cf6', tplName: 'Secure VPC Network' },
+                { name: 'DynamoDB Table', tags: ['DynamoDB'], color: '#f59e0b', tplName: 'Serverless API' },
+            ]
+        },
+        {
+            name: 'Events & Workflows', templates: [
+                { name: 'Lambda + SQS', tags: ['Lambda','SQS'], color: '#ff6b00', tplName: 'Serverless API' },
+                { name: 'EventBridge + Lambda', tags: ['Events','Lambda'], color: '#8b5cf6', tplName: 'Serverless API' },
+            ]
+        },
+        {
+            name: 'Infra & Resilience', templates: [
+                { name: 'Multi-AZ VPC', tags: ['VPC','Subnet','NAT','SG'], color: '#3b82f6', tplName: 'Secure VPC Network' },
+                { name: 'CloudFront + S3', tags: ['CloudFront','S3'], color: '#10b981', tplName: 'Data Lake' },
+                { name: 'Auto Scaling Group', tags: ['ASG','ALB','EC2'], color: '#ff6b00', tplName: 'Web App with ALB & Auto Scaling' },
+            ]
+        },
+        {
+            name: 'Security & IAM', templates: [
+                { name: 'IAM Roles + Policies', tags: ['IAM','KMS'], color: '#ef4444', tplName: 'Secure VPC Network' },
+                { name: 'WAF + CloudFront', tags: ['WAF','CloudFront'], color: '#ef4444', tplName: 'Data Lake' },
+            ]
+        },
+    ];
+
+    function renderSidebarTemplates() {
+        const container = document.getElementById('sidebar-template-categories');
+        if (!container) return;
+        container.innerHTML = '';
+
+        sidebarTemplateData.forEach(cat => {
+            // Category header
+            const catDiv = document.createElement('div');
+            catDiv.className = 'template-cat';
+            catDiv.innerHTML = `<span>${cat.name}</span><svg class="cat-arrow" width="12" height="12" viewBox="0 0 12 12"><path d="M4 2L8 6L4 10" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>`;
+            container.appendChild(catDiv);
+
+            // Items container
+            const itemsDiv = document.createElement('div');
+            itemsDiv.className = 'template-cat-items';
+            cat.templates.forEach(tpl => {
+                const item = document.createElement('div');
+                item.className = 'sidebar-template-item';
+                item.innerHTML = `
+                    <div class="sti-icon" style="background:${tpl.color}">${tpl.name.substring(0,2).toUpperCase()}</div>
+                    <div class="sti-info">
+                        <strong>${tpl.name}</strong>
+                        <div class="sti-tags">${tpl.tags.map(t => `<span class="sti-tag">${t}</span>`).join('')}</div>
+                    </div>
+                `;
+                item.addEventListener('click', () => {
+                    // Load template onto canvas
+                    document.getElementById('arch-name-crumb').textContent = tpl.name;
+                    canvasNodes = [];
+                    connections = [];
+                    canvasArea.querySelectorAll('.canvas-node').forEach(n => n.remove());
+                    canvasArea.querySelectorAll('.canvas-design-node').forEach(n => n.remove());
+                    openDesigner();
+
+                    const resources = getTemplateResources(tpl.tplName);
+                    let delay = 0;
+                    resources.forEach(r => {
+                        setTimeout(() => addNodeToCanvas(r.resource, r.x, r.y), delay);
+                        delay += 200;
+                    });
+                    setTimeout(() => {
+                        showToast(`Template "${tpl.name}" loaded with ${resources.length} resources`, 'success');
+                        saveToLocalStorage();
+                    }, delay + 200);
+                });
+                itemsDiv.appendChild(item);
+            });
+            container.appendChild(itemsDiv);
+
+            // Toggle expand/collapse
+            catDiv.addEventListener('click', () => {
+                const wasExpanded = catDiv.classList.contains('expanded');
+                // Close all others
+                container.querySelectorAll('.template-cat').forEach(c => c.classList.remove('expanded'));
+                container.querySelectorAll('.template-cat-items').forEach(i => i.style.display = 'none');
+                // Toggle this one
+                if (!wasExpanded) {
+                    catDiv.classList.add('expanded');
+                    itemsDiv.style.display = 'block';
+                }
+            });
+        });
+    }
+
+    renderSidebarTemplates();
+
     // Filter chips
     document.querySelectorAll('.filter-chip').forEach(chip => {
         chip.addEventListener('click', () => {
