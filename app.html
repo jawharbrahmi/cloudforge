@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudForge | Visual Cloud Designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css?v=2">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Left Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                        <rect width="32" height="32" rx="8" fill="url(#lg1)"/>
+                        <path d="M8 16L14 10L20 16L14 22L8 16Z" fill="white" opacity="0.9"/>
+                        <path d="M14 10L20 16L26 10L20 4L14 10Z" fill="white" opacity="0.6"/>
+                        <path d="M14 22L20 16L26 22L20 28L14 22Z" fill="white" opacity="0.6"/>
+                        <defs><linearGradient id="lg1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+                    </svg>
+                    <span>CloudForge</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">MY ORGANIZATION</div>
+                <a href="#" class="sidebar-link active" data-page="home">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Home
+                </a>
+                <a href="#" class="sidebar-link" data-page="projects">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+                    Projects
+                </a>
+                <a href="#" class="sidebar-link" data-page="templates">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    Templates
+                </a>
+                <a href="#" class="sidebar-link" data-page="activity">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Activity
+                </a>
+                <a href="#" class="sidebar-link" data-page="settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                    Settings
+                </a>
+            </nav>
+            <div class="sidebar-plan">
+                <div class="plan-badge">Starter <span class="trial-badge">Trial</span></div>
+                <div class="plan-label">Free trial period</div>
+                <div class="plan-bar"><div class="plan-bar-fill"></div></div>
+                <div class="plan-days">Day 30 of 30</div>
+            </div>
+            <button class="sidebar-create-btn" id="create-arch-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Create architecture
+            </button>
+            <div class="sidebar-user">
+                <div class="user-avatar">JB</div>
+                <span>jawhar brahmi</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- ===== HOME PAGE ===== -->
+            <div class="page active" id="page-home">
+                <div class="page-topbar">
+                    <h1 class="page-greeting">Good evening, jawhar!</h1>
+                    <div class="topbar-actions">
+                        <div class="topbar-search" id="topbar-search">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <span>Search or go to...</span>
+                            <kbd>Ctrl+K</kbd>
+                        </div>
+                        <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
+                            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="page-body">
+                    <div class="section-row">
+                        <h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Recent architectures</h2>
+                        <button class="btn-create-sm" id="create-arch-btn-2">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                            Create architecture
+                        </button>
+                    </div>
+                    <div class="arch-grid" id="arch-grid"></div>
+
+                    <div class="section-row" style="margin-top: 40px;">
+                        <h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Recent deployments</h2>
+                    </div>
+                    <div class="deployments-table">
+                        <div class="deploy-row header">
+                            <span>Architecture</span><span>Environment</span><span>Status</span><span>Time</span>
+                        </div>
+                        <div class="deploy-row">
+                            <span class="deploy-name">prod-web-app</span>
+                            <span><span class="env-badge prod">Production</span></span>
+                            <span><span class="status-badge success">Applied</span></span>
+                            <span class="deploy-time">2 hours ago</span>
+                        </div>
+                        <div class="deploy-row">
+                            <span class="deploy-name">staging-api</span>
+                            <span><span class="env-badge staging">Staging</span></span>
+                            <span><span class="status-badge success">Applied</span></span>
+                            <span class="deploy-time">5 hours ago</span>
+                        </div>
+                        <div class="deploy-row">
+                            <span class="deploy-name">dev-microservice</span>
+                            <span><span class="env-badge dev">Development</span></span>
+                            <span><span class="status-badge warning">Drift detected</span></span>
+                            <span class="deploy-time">1 day ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== DESIGNER PAGE ===== -->
+            <div class="page" id="page-designer">
+                <div class="designer-topbar">
+                    <div class="designer-breadcrumb">
+                        <svg width="20" height="20" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="url(#lg2)"/><path d="M8 16L14 10L20 16L14 22L8 16Z" fill="white" opacity="0.9"/><path d="M14 10L20 16L26 10L20 4L14 10Z" fill="white" opacity="0.6"/><defs><linearGradient id="lg2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
+                        <span class="crumb">Project 1</span>
+                        <span class="crumb-sep">/</span>
+                        <span class="crumb">Development</span>
+                        <span class="crumb-sep">/</span>
+                        <span class="crumb active" id="arch-name-crumb">New Architecture</span>
+                    </div>
+                    <div class="designer-toolbar">
+                        <button class="toolbar-btn" title="Undo (Ctrl+Z)" id="undo-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></button>
+                        <button class="toolbar-btn" title="Redo (Ctrl+Shift+Z)" id="redo-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg></button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" title="Select All (Ctrl+A)" id="select-all-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></button>
+                        <button class="toolbar-btn" title="Delete Selected (Del)" id="delete-selected-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" title="Snap to Grid" id="snap-grid-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" title="Import Terraform" id="import-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>
+                        <button class="toolbar-btn" title="Export" id="export-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+                        <button class="toolbar-btn" title="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" title="AI Generate" id="ai-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></button>
+                        <button class="toolbar-btn" title="Notifications" id="notif-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="notif-dot" id="notif-dot"></span></button>
+                        <button class="toolbar-btn" title="Collaboration"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></button>
+                        <button class="toolbar-btn" title="Toggle Dark Mode" id="designer-theme-toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
+                    </div>
+                    <div class="designer-actions">
+                        <button class="btn-code-toggle active" id="toggle-code"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Code</button>
+                        <button class="btn-plan-top" id="plan-btn">Plan</button>
+                        <button class="btn-apply-top" id="apply-top-btn" disabled>Apply</button>
+                    </div>
+                </div>
+
+                <div class="designer-body">
+                    <!-- Resource Panel -->
+                    <div class="resource-panel" id="resource-panel">
+                        <div class="resource-tabs">
+                            <button class="res-tab active" data-tab="resources">Resources</button>
+                            <button class="res-tab" data-tab="templates">Templates</button>
+                        </div>
+
+                        <div class="res-tab-content active" id="tab-resources">
+                            <div class="provider-select">
+                                <div class="provider-badge"><span class="provider-icon">aws</span> <select id="provider-version"><option>6.47.0</option></select></div>
+                            </div>
+                            <div class="resource-search">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                <input type="text" placeholder="Search TF resources" id="resource-search-input">
+                            </div>
+                            <div class="resource-subtabs">
+                                <button class="sub-tab active" data-subtab="resources">Resources</button>
+                                <button class="sub-tab" data-subtab="variables">Variables</button>
+                                <button class="sub-tab" data-subtab="locals">Locals</button>
+                                <button class="sub-tab" data-subtab="outputs">Outputs</button>
+                            </div>
+
+                            <div class="resource-categories" id="resource-categories"></div>
+
+                            <!-- Modules Section -->
+                            <div class="panel-section" id="modules-section">
+                                <div class="panel-section-header">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+                                    Modules
+                                </div>
+                                <div class="modules-empty">
+                                    <p>No modules found</p>
+                                    <span>Import your modules or pick from our catalog</span>
+                                    <div class="modules-actions">
+                                        <button class="btn-module" id="module-import-btn">Import</button>
+                                        <button class="btn-module btn-module-primary" id="module-catalog-btn">Catalog</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Design Section -->
+                            <div class="panel-section" id="design-section">
+                                <div class="panel-section-header">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                    Design
+                                </div>
+                                <div class="design-tools">
+                                    <div class="design-tool-item" data-tool="custom"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Custom</span></div>
+                                    <div class="design-tool-item" data-tool="general"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>General</span></div>
+                                    <div class="design-tool-item" data-tool="icons"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg><span>Icons</span></div>
+                                    <div class="design-tool-item" data-tool="logos"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>Logos</span></div>
+                                    <div class="design-tool-item" data-tool="shapes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg><span>Shapes</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Containers Section -->
+                            <div class="panel-section" id="containers-section">
+                                <div class="panel-section-header">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><rect x="6" y="6" width="12" height="12" rx="1" stroke-dasharray="3 3"/></svg>
+                                    Containers
+                                </div>
+                                <div class="containers-list">
+                                    <div class="container-item" draggable="true" data-container="vpc-container"><div class="container-icon" style="background:#ff9900;">VPC</div><span>VPC Container</span></div>
+                                    <div class="container-item" draggable="true" data-container="subnet-container"><div class="container-icon" style="background:#3b82f6;">SUB</div><span>Subnet Group</span></div>
+                                    <div class="container-item" draggable="true" data-container="region-container"><div class="container-icon" style="background:#8b5cf6;">REG</div><span>Region</span></div>
+                                    <div class="container-item" draggable="true" data-container="az-container"><div class="container-icon" style="background:#10b981;">AZ</div><span>Availability Zone</span></div>
+                                </div>
+                            </div>
+
+                            <div class="variables-panel" id="variables-panel" style="display:none;">
+                                <div class="var-list" id="var-list"></div>
+                                <button class="btn-add-var" id="add-variable-btn">+ Add Variable</button>
+                            </div>
+                            <div class="locals-panel" id="locals-panel" style="display:none;">
+                                <div class="locals-empty">
+                                    <p>No locals defined. Add resources to auto-generate locals.</p>
+                                </div>
+                            </div>
+                            <div class="outputs-panel" id="outputs-panel" style="display:none;">
+                                <div class="output-list" id="output-list"></div>
+                                <button class="btn-add-var" id="add-output-btn">+ Add Output</button>
+                            </div>
+                        </div>
+
+                        <div class="res-tab-content" id="tab-templates">
+                            <div class="template-categories">
+                                <div class="template-cat"><span>Web, API & Apps</span><a href="#">See all</a></div>
+                                <div class="template-cat"><span>Data & Storage</span><a href="#">See all</a></div>
+                                <div class="template-cat"><span>Events & Workflows</span><a href="#">See all</a></div>
+                                <div class="template-cat"><span>Infra & Resilience</span><a href="#">See all</a></div>
+                                <div class="template-cat"><span>Security & IAM</span><a href="#">See all</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canvas -->
+                    <div class="canvas-container" id="canvas-container">
+                        <svg class="canvas-connections" id="canvas-svg"></svg>
+                        <div class="canvas-area" id="canvas-area">
+                            <div class="canvas-empty" id="canvas-empty">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                <h3>Start designing your cloud</h3>
+                                <p>Drag resources from the left panel onto the canvas, or use AI to generate an architecture.</p>
+                                <div class="canvas-empty-actions">
+                                    <button class="btn-empty-ai" id="empty-ai-btn">Generate with AI</button>
+                                    <button class="btn-empty-template" id="empty-template-btn">Use Template</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Floating Canvas Tools (left side, like Brainboard) -->
+                        <div class="canvas-float-tools" id="canvas-float-tools">
+                            <button class="float-tool-btn" id="float-undo" title="Undo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></button>
+                            <button class="float-tool-btn" id="float-redo" title="Redo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg></button>
+                            <div class="float-tool-divider"></div>
+                            <button class="float-tool-btn" id="float-grid" title="Toggle Grid"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                            <button class="float-tool-btn" id="float-align" title="Auto Align"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg></button>
+                        </div>
+
+                        <!-- Minimap -->
+                        <div class="minimap" id="minimap">
+                            <canvas id="minimap-canvas" width="160" height="100"></canvas>
+                            <div class="minimap-viewport" id="minimap-viewport"></div>
+                        </div>
+                        <!-- Canvas Controls -->
+                        <div class="canvas-controls">
+                            <button class="canvas-ctrl" id="zoom-out" title="Zoom out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
+                            <span class="zoom-level" id="zoom-level">100%</span>
+                            <button class="canvas-ctrl" id="zoom-in" title="Zoom in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
+                            <div class="ctrl-divider"></div>
+                            <button class="canvas-ctrl" id="zoom-fit" title="Fit to screen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg></button>
+                        </div>
+                        <!-- Status bar -->
+                        <div class="canvas-status" id="canvas-status">
+                            <span id="status-nodes">0 resources</span>
+                            <span class="status-sep">|</span>
+                            <span id="status-connections">0 connections</span>
+                            <span class="status-sep">|</span>
+                            <span id="status-cost">$0.00/mo</span>
+                        </div>
+                    </div>
+
+                    <!-- Code Panel -->
+                    <div class="code-panel" id="code-panel">
+                        <div class="code-panel-tabs">
+                            <div class="code-panel-tab-row">
+                                <button class="cp-tab active" data-cp="resources">Resources</button>
+                                <button class="cp-tab" data-cp="issues">Issues</button>
+                                <button class="cp-tab" data-cp="deploy">Deploy</button>
+                            </div>
+                        </div>
+                        <div class="code-panel-content" id="code-panel-content">
+                            <div class="cp-section active" id="cp-resources">
+                                <div class="code-files">
+                                    <div class="code-file-tab active" data-file="main">main.tf</div>
+                                    <div class="code-file-tab" data-file="variables">variables.tf</div>
+                                    <div class="code-file-tab" data-file="outputs">outputs.tf</div>
+                                </div>
+                                <pre class="code-editor" id="code-editor"><code id="generated-code"><span class="c-comment"># CloudForge - Auto-generated Terraform</span>
+<span class="c-comment"># Drag resources to the canvas to generate code</span>
+
+<span class="c-keyword">terraform</span> {
+  <span class="c-key">required_providers</span> {
+    <span class="c-key">aws</span> = {
+      <span class="c-key">source</span>  = <span class="c-string">"hashicorp/aws"</span>
+      <span class="c-key">version</span> = <span class="c-string">"~> 6.47.0"</span>
+    }
+  }
+}
+
+<span class="c-keyword">provider</span> <span class="c-string">"aws"</span> {
+  <span class="c-key">region</span> = <span class="c-value">var.aws_region</span>
+}</code></pre>
+                            </div>
+                            <div class="cp-section" id="cp-issues">
+                                <div class="issues-list" id="issues-list">
+                                    <div class="issues-empty">
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="issues-icon-ok"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                        <h4>No issues found</h4>
+                                        <p>Your infrastructure code passes all security and compliance checks.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cp-section" id="cp-deploy">
+                                <div class="deploy-panel">
+                                    <div class="deploy-env-select">
+                                        <label>Environment</label>
+                                        <select id="deploy-env"><option>Development</option><option>Staging</option><option>Production</option></select>
+                                    </div>
+                                    <div class="deploy-actions-bar">
+                                        <button class="btn-plan-lg" id="deploy-plan-btn">Plan</button>
+                                        <button class="btn-apply" id="deploy-apply-btn" disabled>Apply</button>
+                                    </div>
+                                    <div class="deploy-log" id="deploy-log">
+                                        <div class="log-line info">Ready to plan. Add resources to the canvas first.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== PROJECTS PAGE ===== -->
+            <div class="page" id="page-projects">
+                <div class="page-topbar"><h1 id="projects-title">Projects</h1></div>
+                <div class="page-body">
+                    <div id="project-list-view">
+                        <div class="section-row"><h2>All Projects</h2><button class="btn-create-sm" id="new-project-btn">+ New Project</button></div>
+                        <div class="project-grid">
+                            <div class="project-card" data-project="project1">
+                                <div class="project-icon" style="background: #6366f1;">P1</div>
+                                <div class="project-info">
+                                    <h3>Project 1</h3>
+                                    <p>3 architectures &middot; 2 environments</p>
+                                </div>
+                                <span class="project-updated">Updated 2h ago</span>
+                            </div>
+                            <div class="project-card" data-project="project2">
+                                <div class="project-icon" style="background: #8b5cf6;">P2</div>
+                                <div class="project-info">
+                                    <h3>Microservices Platform</h3>
+                                    <p>7 architectures &middot; 3 environments</p>
+                                </div>
+                                <span class="project-updated">Updated 1d ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="project-detail-view" style="display:none;">
+                        <button class="btn-back" id="project-back">&larr; Back to Projects</button>
+                        <div class="project-detail-header">
+                            <div class="project-icon-lg" id="pd-icon">P1</div>
+                            <div class="project-detail-info">
+                                <h2 id="pd-name">Project 1</h2>
+                                <div class="project-meta">
+                                    <span class="meta-item"><span id="pd-arch-count">3</span> architectures</span>
+                                    <span class="meta-item"><span id="pd-env-count">2</span> environments</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-tabs">
+                            <button class="proj-tab active" data-ptab="architectures">Architectures</button>
+                            <button class="proj-tab" data-ptab="environments">Environments</button>
+                            <button class="proj-tab" data-ptab="members">Members</button>
+                        </div>
+                        <div class="proj-tab-content active" id="ptab-architectures">
+                            <div class="section-row"><h3>Architectures</h3><button class="btn-create-sm" id="new-arch-in-project">+ New Architecture</button></div>
+                            <div class="arch-list" id="pd-arch-list"></div>
+                        </div>
+                        <div class="proj-tab-content" id="ptab-environments" style="display:none;">
+                            <h3 style="margin-bottom:16px;">Environments</h3>
+                            <div class="env-list">
+                                <div class="env-card"><span class="env-badge dev">Development</span><span class="env-detail">Default environment &middot; 2 architectures deployed</span></div>
+                                <div class="env-card"><span class="env-badge staging">Staging</span><span class="env-detail">Pre-production testing &middot; 1 architecture deployed</span></div>
+                                <div class="env-card"><span class="env-badge prod">Production</span><span class="env-detail">Live infrastructure &middot; 1 architecture deployed</span></div>
+                            </div>
+                        </div>
+                        <div class="proj-tab-content" id="ptab-members" style="display:none;">
+                            <h3 style="margin-bottom:16px;">Team Members</h3>
+                            <div class="member-list">
+                                <div class="member-row"><div class="user-avatar">JB</div><div><strong>jawhar brahmi</strong><div class="member-role">Owner</div></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TEMPLATES PAGE ===== -->
+            <div class="page" id="page-templates">
+                <div class="page-topbar"><h1>Templates</h1></div>
+                <div class="page-body">
+                    <div class="templates-filter">
+                        <button class="filter-chip active" data-filter="all">All</button>
+                        <button class="filter-chip" data-filter="compute">Compute</button>
+                        <button class="filter-chip" data-filter="serverless">Serverless</button>
+                        <button class="filter-chip" data-filter="network">Network</button>
+                        <button class="filter-chip" data-filter="data">Data</button>
+                    </div>
+                    <div class="templates-grid" id="templates-grid"></div>
+                </div>
+            </div>
+
+            <!-- ===== ACTIVITY PAGE ===== -->
+            <div class="page" id="page-activity">
+                <div class="page-topbar"><h1>Activity</h1></div>
+                <div class="page-body">
+                    <div class="activity-list">
+                        <div class="activity-item"><div class="activity-dot green"></div><div><strong>prod-web-app</strong> deployed to <span class="env-badge prod">Production</span><div class="activity-time">2 hours ago by jawhar brahmi</div></div></div>
+                        <div class="activity-item"><div class="activity-dot blue"></div><div><strong>staging-api</strong> architecture updated<div class="activity-time">5 hours ago by jawhar brahmi</div></div></div>
+                        <div class="activity-item"><div class="activity-dot yellow"></div><div><strong>dev-microservice</strong> drift detected &mdash; 2 resources changed<div class="activity-time">1 day ago &middot; Auto-detected</div></div></div>
+                        <div class="activity-item"><div class="activity-dot green"></div><div><strong>Project 1</strong> created<div class="activity-time">3 days ago by jawhar brahmi</div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SETTINGS PAGE ===== -->
+            <div class="page" id="page-settings">
+                <div class="page-topbar"><h1>Settings</h1></div>
+                <div class="page-body">
+                    <div class="settings-sections">
+                        <div class="settings-card">
+                            <h3>Organization</h3>
+                            <div class="setting-row"><label>Name</label><input type="text" value="jawhar's org" readonly></div>
+                            <div class="setting-row"><label>Plan</label><span class="plan-badge-inline">Starter Trial</span></div>
+                        </div>
+                        <div class="settings-card">
+                            <h3>Appearance</h3>
+                            <div class="setting-row">
+                                <label>Theme</label>
+                                <div class="theme-select">
+                                    <button class="theme-opt active" data-theme="light">Light</button>
+                                    <button class="theme-opt" data-theme="dark">Dark</button>
+                                    <button class="theme-opt" data-theme="system">System</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-card">
+                            <h3>Integrations</h3>
+                            <div class="integration-row"><span class="int-icon github">GH</span><span>GitHub</span><button class="btn-connect">Connect</button></div>
+                            <div class="integration-row"><span class="int-icon gitlab">GL</span><span>GitLab</span><button class="btn-connect">Connect</button></div>
+                            <div class="integration-row"><span class="int-icon aws-int">AWS</span><span>AWS Account</span><button class="btn-connect">Connect</button></div>
+                            <div class="integration-row"><span class="int-icon azure-int">Az</span><span>Azure</span><button class="btn-connect">Connect</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI Modal -->
+    <div class="modal-overlay" id="ai-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> AI Architecture Generator</h3>
+                <button class="modal-close" id="ai-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Describe the infrastructure you need in plain English:</p>
+                <textarea id="ai-prompt" placeholder="e.g., A highly available web application with auto-scaling EC2 instances, an Application Load Balancer, RDS PostgreSQL database with Multi-AZ, and S3 bucket for static assets on AWS..."></textarea>
+                <div class="ai-suggestions">
+                    <span class="ai-chip" data-prompt="A three-tier web app with ALB, EC2 auto-scaling, and RDS PostgreSQL on AWS">3-tier web app</span>
+                    <span class="ai-chip" data-prompt="Serverless API with API Gateway, Lambda, and DynamoDB">Serverless API</span>
+                    <span class="ai-chip" data-prompt="ECS Fargate cluster with ALB and RDS backend">Container platform</span>
+                    <span class="ai-chip" data-prompt="S3 data lake with KMS encryption and IAM roles">Data lake</span>
+                </div>
+                <button class="btn-generate" id="ai-generate">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    Generate Architecture
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Architecture Modal -->
+    <div class="modal-overlay" id="create-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Create your architecture</h3>
+                <button class="modal-close" id="create-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="create-options">
+                    <div class="create-option" id="opt-scratch">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        <h4>From scratch</h4>
+                        <p>Create a blank architecture and start designing.</p>
+                    </div>
+                    <div class="create-option" id="opt-template">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                        <h4>From a template</h4>
+                        <p>Start from a pre-built architecture template.</p>
+                    </div>
+                    <div class="create-option" id="opt-ai">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        <h4>AI Generate</h4>
+                        <p>Describe what you need, AI builds it for you.</p>
+                    </div>
+                </div>
+                <div class="create-form" id="create-form" style="display:none;">
+                    <div class="form-group">
+                        <label>Project</label>
+                        <select><option>Project 1</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Environment</label>
+                        <select><option>Development</option><option>Staging</option><option>Production</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Architecture name <span class="required">*</span></label>
+                        <input type="text" id="new-arch-name" placeholder="e.g., production infrastructure">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-secondary" id="create-back">&larr; Back</button>
+                        <button class="btn-primary-sm" id="create-confirm">Create architecture</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Command Palette -->
+    <div class="modal-overlay" id="cmd-palette-overlay">
+        <div class="cmd-palette">
+            <div class="cmd-search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Search actions, resources, pages..." id="cmd-input" autocomplete="off">
+                <kbd>ESC</kbd>
+            </div>
+            <div class="cmd-results" id="cmd-results"></div>
+        </div>
+    </div>
+
+    <!-- Notifications Panel -->
+    <div class="notif-panel" id="notif-panel">
+        <div class="notif-header"><h4>Notifications</h4><button class="notif-clear" id="notif-clear">Clear all</button></div>
+        <div class="notif-list" id="notif-list"></div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="export-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Export Architecture</h3>
+                <button class="modal-close" id="export-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <div class="export-option" id="export-tf">
+                        <div class="export-icon">TF</div>
+                        <div><strong>Terraform Files</strong><p>Download main.tf, variables.tf, outputs.tf</p></div>
+                    </div>
+                    <div class="export-option" id="export-json">
+                        <div class="export-icon">{ }</div>
+                        <div><strong>JSON Blueprint</strong><p>Architecture as portable JSON schema</p></div>
+                    </div>
+                    <div class="export-option" id="export-diagram">
+                        <div class="export-icon">PNG</div>
+                        <div><strong>Diagram Image</strong><p>Export canvas as PNG image</p></div>
+                    </div>
+                    <div class="export-option" id="export-docs">
+                        <div class="export-icon">DOC</div>
+                        <div><strong>Documentation</strong><p>Auto-generated infrastructure docs</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Properties Panel -->
+    <div class="properties-panel" id="properties-panel">
+        <div class="props-header">
+            <h4 id="props-title">Resource Properties</h4>
+            <button class="props-close" id="props-close">&times;</button>
+        </div>
+        <div class="props-body" id="props-body"></div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="context-menu">
+        <div class="ctx-item" data-action="properties"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4"/></svg> Properties</div>
+        <div class="ctx-item" data-action="duplicate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Duplicate</div>
+        <div class="ctx-item" data-action="connect"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Connect to...</div>
+        <div class="ctx-divider"></div>
+        <div class="ctx-item" data-action="bringfront"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg> Bring to Front</div>
+        <div class="ctx-item" data-action="sendback"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg> Send to Back</div>
+        <div class="ctx-divider"></div>
+        <div class="ctx-item danger" data-action="delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete</div>
+    </div>
+
+    <!-- Cost Bar -->
+    <div class="cost-bar" id="cost-bar" style="display:none;">
+        <div class="cost-icon">$</div>
+        <span>Estimated monthly cost: <strong id="cost-value">$0.00</strong></span>
+        <span class="cost-detail" id="cost-detail">0 resources</span>
+    </div>
+
+    <!-- Keyboard Shortcuts Overlay -->
+    <div class="modal-overlay" id="shortcuts-modal">
+        <div class="modal modal-lg shortcuts-panel">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/></svg> Keyboard Shortcuts</h3>
+                <button class="modal-close" id="shortcuts-close">&times;</button>
+            </div>
+            <div class="modal-body shortcuts-body">
+                <div class="shortcut-group">
+                    <h4>General</h4>
+                    <div class="shortcut-row"><span>Command Palette</span><kbd>Ctrl</kbd>+<kbd>K</kbd></div>
+                    <div class="shortcut-row"><span>Toggle Dark Mode</span><kbd>Ctrl</kbd>+<kbd>D</kbd></div>
+                    <div class="shortcut-row"><span>Show Shortcuts</span><kbd>?</kbd></div>
+                </div>
+                <div class="shortcut-group">
+                    <h4>Canvas</h4>
+                    <div class="shortcut-row"><span>Undo</span><kbd>Ctrl</kbd>+<kbd>Z</kbd></div>
+                    <div class="shortcut-row"><span>Redo</span><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></div>
+                    <div class="shortcut-row"><span>Select All</span><kbd>Ctrl</kbd>+<kbd>A</kbd></div>
+                    <div class="shortcut-row"><span>Delete Selected</span><kbd>Del</kbd></div>
+                    <div class="shortcut-row"><span>Pan Canvas</span><kbd>Space</kbd>+<kbd>Drag</kbd></div>
+                    <div class="shortcut-row"><span>Zoom In/Out</span><kbd>Ctrl</kbd>+<kbd>Scroll</kbd></div>
+                    <div class="shortcut-row"><span>Multi-select</span><kbd>Shift</kbd>+<kbd>Click</kbd></div>
+                    <div class="shortcut-row"><span>Box Select</span><kbd>Drag</kbd> on canvas</div>
+                </div>
+                <div class="shortcut-group">
+                    <h4>Nodes</h4>
+                    <div class="shortcut-row"><span>Properties</span><kbd>Double Click</kbd></div>
+                    <div class="shortcut-row"><span>Context Menu</span><kbd>Right Click</kbd></div>
+                    <div class="shortcut-row"><span>Connect Nodes</span><kbd>Drag</kbd> port to port</div>
+                    <div class="shortcut-row"><span>Duplicate</span><kbd>Ctrl</kbd>+<kbd>D</kbd> (on node)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Terraform Modal -->
+    <div class="modal-overlay" id="import-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Import Terraform</h3>
+                <button class="modal-close" id="import-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Paste your existing Terraform code to auto-generate the architecture diagram:</p>
+                <textarea id="import-tf-input" class="import-textarea" placeholder='resource "aws_instance" "web" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t3.large"
+
+  tags = {
+    Name = "web-server"
+  }
+}
+
+resource "aws_s3_bucket" "data" {
+  bucket = "my-data-bucket"
+}'></textarea>
+                <div class="import-actions">
+                    <div class="import-info">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        Supports HCL resource blocks. We'll detect resource types automatically.
+                    </div>
+                    <button class="btn-generate" id="import-tf-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        Import &amp; Generate Diagram
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Selection Rectangle -->
+    <div class="selection-box" id="selection-box" style="display:none;"></div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js?v=2"></script>
+</body>
+</html>
