@@ -241,9 +241,189 @@ document.addEventListener('DOMContentLoaded', () => {
         setupDragAndDrop();
     }
 
+    // Provider-specific resources
+    const providerResources = {
+        azure: [
+            { name: 'Compute', color: '#0078d4', items: [
+                { id: 'azure_vm', label: 'VM', type: 'azurerm_virtual_machine', detail: 'Standard_D2s_v3', tf: 'azurerm_virtual_machine' },
+                { id: 'azure_func', label: 'Functions', type: 'azurerm_function_app', detail: 'Consumption', tf: 'azurerm_function_app' },
+                { id: 'azure_aks', label: 'AKS', type: 'azurerm_kubernetes_cluster', detail: 'managed K8s', tf: 'azurerm_kubernetes_cluster' },
+                { id: 'azure_container', label: 'Container', type: 'azurerm_container_group', detail: 'ACI', tf: 'azurerm_container_group' },
+            ]},
+            { name: 'Network', color: '#0078d4', items: [
+                { id: 'azure_vnet', label: 'VNet', type: 'azurerm_virtual_network', detail: '10.0.0.0/16', tf: 'azurerm_virtual_network' },
+                { id: 'azure_subnet', label: 'Subnet', type: 'azurerm_subnet', detail: 'default', tf: 'azurerm_subnet' },
+                { id: 'azure_lb', label: 'Load Bal.', type: 'azurerm_lb', detail: 'Standard', tf: 'azurerm_lb' },
+                { id: 'azure_appgw', label: 'App GW', type: 'azurerm_application_gateway', detail: 'WAF_v2', tf: 'azurerm_application_gateway' },
+                { id: 'azure_nsg', label: 'NSG', type: 'azurerm_network_security_group', detail: 'rules', tf: 'azurerm_network_security_group' },
+            ]},
+            { name: 'Database', color: '#0078d4', items: [
+                { id: 'azure_sql', label: 'SQL DB', type: 'azurerm_mssql_database', detail: 'SQL Server', tf: 'azurerm_mssql_database' },
+                { id: 'azure_cosmos', label: 'Cosmos DB', type: 'azurerm_cosmosdb_account', detail: 'multi-model', tf: 'azurerm_cosmosdb_account' },
+                { id: 'azure_redis', label: 'Redis', type: 'azurerm_redis_cache', detail: 'Premium', tf: 'azurerm_redis_cache' },
+                { id: 'azure_postgres', label: 'PostgreSQL', type: 'azurerm_postgresql_flexible_server', detail: 'Flexible', tf: 'azurerm_postgresql_flexible_server' },
+            ]},
+            { name: 'Storage', color: '#0078d4', items: [
+                { id: 'azure_storage', label: 'Storage', type: 'azurerm_storage_account', detail: 'StorageV2', tf: 'azurerm_storage_account' },
+                { id: 'azure_blob', label: 'Blob', type: 'azurerm_storage_container', detail: 'private', tf: 'azurerm_storage_container' },
+            ]},
+        ],
+        gcp: [
+            { name: 'Compute', color: '#4285f4', items: [
+                { id: 'gcp_instance', label: 'GCE', type: 'google_compute_instance', detail: 'e2-medium', tf: 'google_compute_instance' },
+                { id: 'gcp_function', label: 'Cloud Func', type: 'google_cloudfunctions2_function', detail: 'Gen2', tf: 'google_cloudfunctions2_function' },
+                { id: 'gcp_gke', label: 'GKE', type: 'google_container_cluster', detail: 'Autopilot', tf: 'google_container_cluster' },
+                { id: 'gcp_run', label: 'Cloud Run', type: 'google_cloud_run_v2_service', detail: 'serverless', tf: 'google_cloud_run_v2_service' },
+            ]},
+            { name: 'Network', color: '#4285f4', items: [
+                { id: 'gcp_vpc', label: 'VPC', type: 'google_compute_network', detail: 'auto mode', tf: 'google_compute_network' },
+                { id: 'gcp_subnet', label: 'Subnet', type: 'google_compute_subnetwork', detail: 'regional', tf: 'google_compute_subnetwork' },
+                { id: 'gcp_lb', label: 'Load Bal.', type: 'google_compute_global_forwarding_rule', detail: 'HTTPS', tf: 'google_compute_global_forwarding_rule' },
+                { id: 'gcp_firewall', label: 'Firewall', type: 'google_compute_firewall', detail: 'rules', tf: 'google_compute_firewall' },
+            ]},
+            { name: 'Database', color: '#4285f4', items: [
+                { id: 'gcp_sql', label: 'Cloud SQL', type: 'google_sql_database_instance', detail: 'PostgreSQL', tf: 'google_sql_database_instance' },
+                { id: 'gcp_spanner', label: 'Spanner', type: 'google_spanner_instance', detail: 'regional', tf: 'google_spanner_instance' },
+                { id: 'gcp_firestore', label: 'Firestore', type: 'google_firestore_database', detail: 'Native', tf: 'google_firestore_database' },
+                { id: 'gcp_bigtable', label: 'Bigtable', type: 'google_bigtable_instance', detail: 'Production', tf: 'google_bigtable_instance' },
+            ]},
+            { name: 'Storage', color: '#4285f4', items: [
+                { id: 'gcp_bucket', label: 'GCS', type: 'google_storage_bucket', detail: 'Standard', tf: 'google_storage_bucket' },
+                { id: 'gcp_disk', label: 'Disk', type: 'google_compute_disk', detail: 'pd-ssd', tf: 'google_compute_disk' },
+            ]},
+        ],
+        oci: [
+            { name: 'Compute', color: '#c74634', items: [
+                { id: 'oci_instance', label: 'Instance', type: 'oci_core_instance', detail: 'VM.Standard', tf: 'oci_core_instance' },
+                { id: 'oci_container', label: 'OKE', type: 'oci_containerengine_cluster', detail: 'managed K8s', tf: 'oci_containerengine_cluster' },
+            ]},
+            { name: 'Network', color: '#c74634', items: [
+                { id: 'oci_vcn', label: 'VCN', type: 'oci_core_vcn', detail: '10.0.0.0/16', tf: 'oci_core_vcn' },
+                { id: 'oci_subnet', label: 'Subnet', type: 'oci_core_subnet', detail: 'regional', tf: 'oci_core_subnet' },
+                { id: 'oci_lb', label: 'Load Bal.', type: 'oci_load_balancer', detail: 'flexible', tf: 'oci_load_balancer' },
+            ]},
+            { name: 'Database', color: '#c74634', items: [
+                { id: 'oci_adb', label: 'Auto DB', type: 'oci_database_autonomous_database', detail: 'Serverless', tf: 'oci_database_autonomous_database' },
+                { id: 'oci_mysql', label: 'MySQL', type: 'oci_mysql_mysql_db_system', detail: 'HeatWave', tf: 'oci_mysql_mysql_db_system' },
+            ]},
+            { name: 'Storage', color: '#c74634', items: [
+                { id: 'oci_bucket', label: 'Bucket', type: 'oci_objectstorage_bucket', detail: 'Standard', tf: 'oci_objectstorage_bucket' },
+            ]},
+        ],
+        kubernetes: [
+            { name: 'Workloads', color: '#326ce5', items: [
+                { id: 'k8s_deploy', label: 'Deployment', type: 'kubernetes_deployment_v1', detail: 'replicas: 3', tf: 'kubernetes_deployment_v1' },
+                { id: 'k8s_service', label: 'Service', type: 'kubernetes_service_v1', detail: 'LoadBalancer', tf: 'kubernetes_service_v1' },
+                { id: 'k8s_ingress', label: 'Ingress', type: 'kubernetes_ingress_v1', detail: 'nginx', tf: 'kubernetes_ingress_v1' },
+                { id: 'k8s_configmap', label: 'ConfigMap', type: 'kubernetes_config_map_v1', detail: 'key-value', tf: 'kubernetes_config_map_v1' },
+                { id: 'k8s_secret', label: 'Secret', type: 'kubernetes_secret_v1', detail: 'Opaque', tf: 'kubernetes_secret_v1' },
+                { id: 'k8s_ns', label: 'Namespace', type: 'kubernetes_namespace_v1', detail: 'isolation', tf: 'kubernetes_namespace_v1' },
+            ]},
+            { name: 'Storage', color: '#326ce5', items: [
+                { id: 'k8s_pvc', label: 'PVC', type: 'kubernetes_persistent_volume_claim_v1', detail: '10Gi', tf: 'kubernetes_persistent_volume_claim_v1' },
+                { id: 'k8s_pv', label: 'PV', type: 'kubernetes_persistent_volume_v1', detail: 'hostPath', tf: 'kubernetes_persistent_volume_v1' },
+            ]},
+        ],
+    };
+
+    let activeProvider = 'aws';
+
+    // Provider dropdown toggle
+    document.getElementById('provider-badge-btn')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('provider-dropdown').classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.provider-select')) {
+            document.getElementById('provider-dropdown')?.classList.remove('active');
+        }
+    });
+
+    // Provider option click
+    document.querySelectorAll('.provider-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            const provider = opt.dataset.provider;
+            const version = opt.dataset.version;
+            const color = opt.dataset.color;
+            const name = opt.querySelector('span').textContent;
+            const iconText = opt.querySelector('.po-icon').textContent;
+
+            // Update active state
+            document.querySelectorAll('.provider-option').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+
+            // Update badge
+            const badge = document.getElementById('active-provider-icon');
+            badge.textContent = iconText;
+            badge.style.background = color;
+            document.getElementById('active-provider-name').textContent = name;
+            document.getElementById('provider-version').innerHTML = version ? `<option>${version}</option>` : '<option>latest</option>';
+
+            // Close dropdown
+            document.getElementById('provider-dropdown').classList.remove('active');
+
+            // Switch resources
+            activeProvider = provider;
+            if (provider === 'aws') {
+                renderResources();
+            } else if (providerResources[provider]) {
+                renderProviderResources(providerResources[provider]);
+            } else {
+                // Custom or unsupported - show empty with message
+                categoriesContainer.innerHTML = `<div style="text-align:center;padding:30px 10px;color:var(--text-muted);font-size:0.85rem;"><p style="font-weight:600;margin-bottom:8px;">${name} Resources</p><p>Search and drag ${name} Terraform resources onto the canvas.</p></div>`;
+            }
+
+            showToast(`Switched to ${name} provider`, 'success');
+        });
+    });
+
+    function renderProviderResources(categories) {
+        categoriesContainer.innerHTML = '';
+        categories.forEach(cat => {
+            const catDiv = document.createElement('div');
+            catDiv.className = 'res-category';
+            catDiv.innerHTML = `
+                <div class="res-cat-header">
+                    <svg width="12" height="12" viewBox="0 0 12 12"><path d="M3 2L9 6L3 10" fill="currentColor"/></svg>
+                    ${cat.name}
+                    <span style="color:var(--text-muted);font-size:0.7rem;margin-left:auto;">${cat.items.length}</span>
+                </div>
+                <div class="res-cat-grid">
+                    ${cat.items.map(item => `
+                        <div class="resource-item" data-resource='${JSON.stringify(item).replace(/'/g, "&#39;")}' data-cat="${cat.name}" draggable="true">
+                            <div class="res-item-icon" style="background: ${cat.color}">${item.label.substring(0, 3).toUpperCase()}</div>
+                            <span>${item.label}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            categoriesContainer.appendChild(catDiv);
+
+            const header = catDiv.querySelector('.res-cat-header');
+            const grid = catDiv.querySelector('.res-cat-grid');
+            header.addEventListener('click', () => {
+                header.classList.toggle('collapsed');
+                grid.classList.toggle('collapsed');
+            });
+        });
+        setupDragAndDrop();
+    }
+
     renderResources();
 
-    document.getElementById('resource-search-input').addEventListener('input', (e) => renderResources(e.target.value));
+    document.getElementById('resource-search-input').addEventListener('input', (e) => {
+        if (activeProvider === 'aws') {
+            renderResources(e.target.value);
+        } else if (providerResources[activeProvider]) {
+            const filter = e.target.value.toLowerCase();
+            const filtered = providerResources[activeProvider].map(cat => ({
+                ...cat,
+                items: cat.items.filter(i => i.label.toLowerCase().includes(filter) || i.type.toLowerCase().includes(filter))
+            })).filter(cat => cat.items.length > 0);
+            renderProviderResources(filtered);
+        }
+    });
 
     // Sub-tabs
     document.querySelectorAll('.sub-tab').forEach(tab => {

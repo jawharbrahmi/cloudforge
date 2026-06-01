@@ -6,7 +6,7 @@
     <title>CloudForge | Visual Cloud Designer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="app.css?v=6">
+    <link rel="stylesheet" href="app.css?v=7">
 </head>
 <body>
     <div class="app-layout">
@@ -167,7 +167,64 @@
 
                         <div class="res-tab-content active" id="tab-resources">
                             <div class="provider-select">
-                                <div class="provider-badge"><span class="provider-icon">aws</span> <select id="provider-version"><option>6.47.0</option></select></div>
+                                <div class="provider-badge" id="provider-badge-btn">
+                                    <span class="provider-icon" id="active-provider-icon">aws</span>
+                                    <span id="active-provider-name">AWS</span>
+                                    <select id="provider-version"><option>6.47.0</option></select>
+                                    <svg class="provider-chevron" width="12" height="12" viewBox="0 0 12 12"><path d="M3 5L6 8L9 5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+                                </div>
+                                <div class="provider-dropdown" id="provider-dropdown">
+                                    <div class="provider-grid">
+                                        <div class="provider-option active" data-provider="aws" data-version="6.47.0" data-color="#ff9900">
+                                            <div class="po-icon" style="background:#ff9900;color:#fff;">aws</div>
+                                            <span>AWS</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="azure" data-version="4.14.0" data-color="#0078d4">
+                                            <div class="po-icon" style="background:#0078d4;color:#fff;">Az</div>
+                                            <span>Azure</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="gcp" data-version="6.12.0" data-color="#4285f4">
+                                            <div class="po-icon" style="background:#4285f4;color:#fff;">GC</div>
+                                            <span>GCP</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="oci" data-version="6.18.0" data-color="#c74634">
+                                            <div class="po-icon" style="background:#c74634;color:#fff;">OCI</div>
+                                            <span>Oracle</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="scaleway" data-version="2.46.0" data-color="#4f0599">
+                                            <div class="po-icon" style="background:#4f0599;color:#fff;">SCW</div>
+                                            <span>Scaleway</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="kubernetes" data-version="2.35.0" data-color="#326ce5">
+                                            <div class="po-icon" style="background:#326ce5;color:#fff;">K8s</div>
+                                            <span>K8s</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="datadog" data-version="3.50.0" data-color="#632ca6">
+                                            <div class="po-icon" style="background:#632ca6;color:#fff;">DD</div>
+                                            <span>Datadog</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="cloudflare" data-version="4.48.0" data-color="#f38020">
+                                            <div class="po-icon" style="background:#f38020;color:#fff;">CF</div>
+                                            <span>Cloudflare</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="databricks" data-version="1.58.0" data-color="#ff3621">
+                                            <div class="po-icon" style="background:#ff3621;color:#fff;">DB</div>
+                                            <span>Databricks</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="confluent" data-version="2.11.0" data-color="#172b4d">
+                                            <div class="po-icon" style="background:#172b4d;color:#fff;">CK</div>
+                                            <span>Confluent</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="mongodbatlas" data-version="1.21.0" data-color="#00684a">
+                                            <div class="po-icon" style="background:#00684a;color:#fff;">MG</div>
+                                            <span>MongoDB</span>
+                                        </div>
+                                        <div class="provider-option" data-provider="custom" data-version="" data-color="#6366f1">
+                                            <div class="po-icon" style="background:#6366f1;color:#fff;">+</div>
+                                            <span>Custom</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="resource-search">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -899,6 +956,6 @@ resource "aws_s3_bucket" "data" {
     <!-- Toast -->
     <div class="toast-container" id="toast-container"></div>
 
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=7"></script>
 </body>
 </html>
