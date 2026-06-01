@@ -5,59 +5,121 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             name: 'Compute', icon: '>', color: '#ff6b00',
             items: [
-                { id: 'ec2', label: 'EC2', type: 'aws_instance', detail: 't3.large', tf: 'aws_instance' },
-                { id: 'lambda', label: 'Lambda', type: 'aws_lambda_function', detail: 'Node.js 20', tf: 'aws_lambda_function' },
-                { id: 'ecs', label: 'ECS', type: 'aws_ecs_cluster', detail: 'Fargate', tf: 'aws_ecs_cluster' },
-                { id: 'autoscaling', label: 'AutoScale', type: 'aws_autoscaling_group', detail: '2-10 instances', tf: 'aws_autoscaling_group' },
-                { id: 'lightsail', label: 'Lightsail', type: 'aws_lightsail_instance', detail: 'micro', tf: 'aws_lightsail_instance' },
+                { id: 'apprunner', label: 'App Runner', type: 'aws_apprunner_service', detail: 'container svc', tf: 'aws_apprunner_service' },
+                { id: 'autoscaling', label: 'AutoScaling', type: 'aws_autoscaling_group', detail: '2-10 instances', tf: 'aws_autoscaling_group' },
                 { id: 'batch', label: 'Batch', type: 'aws_batch_compute_environment', detail: 'managed', tf: 'aws_batch_compute_environment' },
+                { id: 'ecs', label: 'Containers', type: 'aws_ecs_cluster', detail: 'Fargate', tf: 'aws_ecs_cluster' },
+                { id: 'ec2', label: 'EC2', type: 'aws_instance', detail: 't3.large', tf: 'aws_instance' },
+                { id: 'beanstalk', label: 'Elastic Beanstalk', type: 'aws_elastic_beanstalk_environment', detail: 'managed app', tf: 'aws_elastic_beanstalk_environment' },
+                { id: 'imagebuilder', label: 'Image Builder', type: 'aws_imagebuilder_image_pipeline', detail: 'AMI pipeline', tf: 'aws_imagebuilder_image_pipeline' },
+                { id: 'lambda', label: 'Lambda', type: 'aws_lambda_function', detail: 'Node.js 20', tf: 'aws_lambda_function' },
+                { id: 'lightsail', label: 'Lightsail', type: 'aws_lightsail_instance', detail: 'micro', tf: 'aws_lightsail_instance' },
             ]
         },
         {
             name: 'Network', icon: '~', color: '#3b82f6',
             items: [
-                { id: 'vpc', label: 'VPC', type: 'aws_vpc', detail: '10.0.0.0/16', tf: 'aws_vpc' },
-                { id: 'subnet', label: 'Subnet', type: 'aws_subnet', detail: 'public', tf: 'aws_subnet' },
-                { id: 'alb', label: 'ALB', type: 'aws_lb', detail: 'internet-facing', tf: 'aws_lb' },
-                { id: 'route53', label: 'Route53', type: 'aws_route53_zone', detail: 'public zone', tf: 'aws_route53_zone' },
+                { id: 'apigateway', label: 'API Gateway', type: 'aws_api_gateway_rest_api', detail: 'REST', tf: 'aws_api_gateway_rest_api' },
+                { id: 'appmesh', label: 'AppMesh', type: 'aws_appmesh_mesh', detail: 'service mesh', tf: 'aws_appmesh_mesh' },
                 { id: 'cloudfront', label: 'CloudFront', type: 'aws_cloudfront_distribution', detail: 'CDN', tf: 'aws_cloudfront_distribution' },
-                { id: 'apigateway', label: 'API GW', type: 'aws_api_gateway_rest_api', detail: 'REST', tf: 'aws_api_gateway_rest_api' },
+                { id: 'directconnect', label: 'Direct Connect', type: 'aws_dx_connection', detail: 'dedicated link', tf: 'aws_dx_connection' },
+                { id: 'globalaccelerator', label: 'Global Accel.', type: 'aws_globalaccelerator_accelerator', detail: 'anycast IP', tf: 'aws_globalaccelerator_accelerator' },
+                { id: 'alb', label: 'Load Balancers', type: 'aws_lb', detail: 'ALB/NLB', tf: 'aws_lb' },
+                { id: 'networkfirewall', label: 'Network FW', type: 'aws_networkfirewall_firewall', detail: 'managed FW', tf: 'aws_networkfirewall_firewall' },
+                { id: 'networkmanager', label: 'Network Mgr', type: 'aws_networkmanager_global_network', detail: 'global net', tf: 'aws_networkmanager_global_network' },
+                { id: 'route53', label: 'Route53', type: 'aws_route53_zone', detail: 'DNS', tf: 'aws_route53_zone' },
+                { id: 'transitgw', label: 'Transit GW', type: 'aws_ec2_transit_gateway', detail: 'hub routing', tf: 'aws_ec2_transit_gateway' },
+                { id: 'vpc', label: 'VPC', type: 'aws_vpc', detail: '10.0.0.0/16', tf: 'aws_vpc' },
+                { id: 'vpn', label: 'VPN', type: 'aws_vpn_gateway', detail: 'site-to-site', tf: 'aws_vpn_gateway' },
+                { id: 'subnet', label: 'Subnet', type: 'aws_subnet', detail: 'public', tf: 'aws_subnet' },
                 { id: 'sg', label: 'Sec Group', type: 'aws_security_group', detail: 'ingress/egress', tf: 'aws_security_group' },
                 { id: 'natgw', label: 'NAT GW', type: 'aws_nat_gateway', detail: 'elastic IP', tf: 'aws_nat_gateway' },
             ]
         },
         {
-            name: 'Database', icon: '#', color: '#8b5cf6',
-            items: [
-                { id: 'rds', label: 'RDS', type: 'aws_db_instance', detail: 'PostgreSQL', tf: 'aws_db_instance' },
-                { id: 'dynamodb', label: 'DynamoDB', type: 'aws_dynamodb_table', detail: 'on-demand', tf: 'aws_dynamodb_table' },
-                { id: 'elasticache', label: 'ElastiCache', type: 'aws_elasticache_cluster', detail: 'Redis', tf: 'aws_elasticache_cluster' },
-                { id: 'aurora', label: 'Aurora', type: 'aws_rds_cluster', detail: 'serverless v2', tf: 'aws_rds_cluster' },
-                { id: 'dms', label: 'DMS', type: 'aws_dms_replication_instance', detail: 'migration', tf: 'aws_dms_replication_instance' },
-                { id: 'docdb', label: 'DocumentDB', type: 'aws_docdb_cluster', detail: 'MongoDB compat', tf: 'aws_docdb_cluster' },
-                { id: 'neptune', label: 'Neptune', type: 'aws_neptune_cluster', detail: 'graph DB', tf: 'aws_neptune_cluster' },
-                { id: 'timestream', label: 'Timestream', type: 'aws_timestreamwrite_database', detail: 'time series', tf: 'aws_timestreamwrite_database' },
-            ]
-        },
-        {
             name: 'Storage', icon: '=', color: '#10b981',
             items: [
+                { id: 'glacier', label: 'Archive', type: 'aws_glacier_vault', detail: 'cold storage', tf: 'aws_glacier_vault' },
+                { id: 'backup', label: 'Backup', type: 'aws_backup_vault', detail: 'backup vault', tf: 'aws_backup_vault' },
+                { id: 'efs', label: 'File System', type: 'aws_efs_file_system', detail: 'EFS/FSx', tf: 'aws_efs_file_system' },
                 { id: 's3', label: 'S3', type: 'aws_s3_bucket', detail: 'private', tf: 'aws_s3_bucket' },
-                { id: 'efs', label: 'EFS', type: 'aws_efs_file_system', detail: 'general purpose', tf: 'aws_efs_file_system' },
+                { id: 'storagegw', label: 'Storage GW', type: 'aws_storagegateway_gateway', detail: 'hybrid', tf: 'aws_storagegateway_gateway' },
                 { id: 'ebs', label: 'EBS', type: 'aws_ebs_volume', detail: 'gp3, 100GB', tf: 'aws_ebs_volume' },
             ]
         },
         {
-            name: 'Security', icon: '!', color: '#ef4444',
+            name: 'Database', icon: '#', color: '#8b5cf6',
             items: [
-                { id: 'iam_role', label: 'IAM Role', type: 'aws_iam_role', detail: 'assume role', tf: 'aws_iam_role' },
-                { id: 'iam_policy', label: 'IAM Policy', type: 'aws_iam_policy', detail: 'custom', tf: 'aws_iam_policy' },
-                { id: 'kms', label: 'KMS', type: 'aws_kms_key', detail: 'symmetric', tf: 'aws_kms_key' },
-                { id: 'waf', label: 'WAF', type: 'aws_wafv2_web_acl', detail: 'regional', tf: 'aws_wafv2_web_acl' },
+                { id: 'dms', label: 'DMS', type: 'aws_dms_replication_instance', detail: 'migration', tf: 'aws_dms_replication_instance' },
+                { id: 'docdb', label: 'DocumentDB', type: 'aws_docdb_cluster', detail: 'MongoDB compat', tf: 'aws_docdb_cluster' },
+                { id: 'dynamodb', label: 'DynamoDB', type: 'aws_dynamodb_table', detail: 'on-demand', tf: 'aws_dynamodb_table' },
+                { id: 'elasticache', label: 'ElastiCache', type: 'aws_elasticache_cluster', detail: 'Redis', tf: 'aws_elasticache_cluster' },
+                { id: 'elasticsearch', label: 'ElasticSearch', type: 'aws_elasticsearch_domain', detail: 'OpenSearch', tf: 'aws_elasticsearch_domain' },
+                { id: 'keyspaces', label: 'Keyspaces', type: 'aws_keyspaces_keyspace', detail: 'Cassandra', tf: 'aws_keyspaces_keyspace' },
+                { id: 'neptune', label: 'Neptune', type: 'aws_neptune_cluster', detail: 'graph DB', tf: 'aws_neptune_cluster' },
+                { id: 'qldb', label: 'QLDB', type: 'aws_qldb_ledger', detail: 'ledger DB', tf: 'aws_qldb_ledger' },
+                { id: 'rds', label: 'RDS', type: 'aws_db_instance', detail: 'PostgreSQL', tf: 'aws_db_instance' },
+                { id: 'timestream', label: 'Timestream', type: 'aws_timestreamwrite_database', detail: 'time series', tf: 'aws_timestreamwrite_database' },
+            ]
+        },
+        {
+            name: 'Security & Identity', icon: '!', color: '#ef4444',
+            items: [
+                { id: 'accessanalyzer', label: 'Access Analyzer', type: 'aws_accessanalyzer_analyzer', detail: 'IAM analysis', tf: 'aws_accessanalyzer_analyzer' },
                 { id: 'acm', label: 'ACM', type: 'aws_acm_certificate', detail: 'SSL/TLS', tf: 'aws_acm_certificate' },
+                { id: 'auditmanager', label: 'Audit Mgr', type: 'aws_auditmanager_assessment', detail: 'compliance', tf: 'aws_auditmanager_assessment' },
                 { id: 'cognito', label: 'Cognito', type: 'aws_cognito_user_pool', detail: 'user pool', tf: 'aws_cognito_user_pool' },
+                { id: 'detective', label: 'Detective', type: 'aws_detective_graph', detail: 'investigation', tf: 'aws_detective_graph' },
+                { id: 'directoryservice', label: 'Directory Svc', type: 'aws_directory_service_directory', detail: 'AD', tf: 'aws_directory_service_directory' },
+                { id: 'fms', label: 'Firewall Mgr', type: 'aws_fms_policy', detail: 'FMS policy', tf: 'aws_fms_policy' },
                 { id: 'guardduty', label: 'GuardDuty', type: 'aws_guardduty_detector', detail: 'threat detect', tf: 'aws_guardduty_detector' },
+                { id: 'iam_role', label: 'IAM', type: 'aws_iam_role', detail: 'roles/policies', tf: 'aws_iam_role' },
+                { id: 'inspector', label: 'Inspector', type: 'aws_inspector2_enabler', detail: 'vuln scan', tf: 'aws_inspector2_enabler' },
+                { id: 'kms', label: 'KMS', type: 'aws_kms_key', detail: 'symmetric', tf: 'aws_kms_key' },
+                { id: 'macie', label: 'Macie', type: 'aws_macie2_account', detail: 'data security', tf: 'aws_macie2_account' },
                 { id: 'secrets', label: 'Secrets Mgr', type: 'aws_secretsmanager_secret', detail: 'secret store', tf: 'aws_secretsmanager_secret' },
+                { id: 'securityhub', label: 'Security Hub', type: 'aws_securityhub_account', detail: 'posture mgmt', tf: 'aws_securityhub_account' },
+                { id: 'shield', label: 'Shield', type: 'aws_shield_protection', detail: 'DDoS protect', tf: 'aws_shield_protection' },
+                { id: 'sso', label: 'SSO', type: 'aws_ssoadmin_managed_policy_attachment', detail: 'identity', tf: 'aws_ssoadmin_managed_policy_attachment' },
+                { id: 'waf', label: 'WAF', type: 'aws_wafv2_web_acl', detail: 'web firewall', tf: 'aws_wafv2_web_acl' },
+            ]
+        },
+        {
+            name: 'Tools', icon: '@', color: '#f59e0b',
+            items: [
+                { id: 'budgets', label: 'Budgets', type: 'aws_budgets_budget', detail: 'cost alerts', tf: 'aws_budgets_budget' },
+                { id: 'costexplorer', label: 'Cost Explorer', type: 'aws_ce_cost_category', detail: 'cost analysis', tf: 'aws_ce_cost_category' },
+                { id: 'cloudformation', label: 'CloudFormation', type: 'aws_cloudformation_stack', detail: 'IaC stacks', tf: 'aws_cloudformation_stack' },
+                { id: 'cloudtrail', label: 'CloudTrail', type: 'aws_cloudtrail', detail: 'audit logs', tf: 'aws_cloudtrail' },
+                { id: 'cloudwatch', label: 'CloudWatch', type: 'aws_cloudwatch_log_group', detail: 'monitoring', tf: 'aws_cloudwatch_log_group' },
+                { id: 'codebuild', label: 'CodeBuild', type: 'aws_codebuild_project', detail: 'CI builds', tf: 'aws_codebuild_project' },
+                { id: 'codecommit', label: 'CodeCommit', type: 'aws_codecommit_repository', detail: 'git repo', tf: 'aws_codecommit_repository' },
+                { id: 'codedeploy', label: 'CodeDeploy', type: 'aws_codedeploy_app', detail: 'deployments', tf: 'aws_codedeploy_app' },
+                { id: 'codepipeline', label: 'CodePipeline', type: 'aws_codepipeline', detail: 'CI/CD', tf: 'aws_codepipeline' },
+                { id: 'config', label: 'Config', type: 'aws_config_configuration_recorder', detail: 'compliance', tf: 'aws_config_configuration_recorder' },
+                { id: 'controltower', label: 'Control Tower', type: 'aws_controltower_control', detail: 'governance', tf: 'aws_controltower_control' },
+                { id: 'datasync', label: 'DataSync', type: 'aws_datasync_task', detail: 'data transfer', tf: 'aws_datasync_task' },
+                { id: 'grafana', label: 'Grafana', type: 'aws_grafana_workspace', detail: 'dashboards', tf: 'aws_grafana_workspace' },
+                { id: 'mq', label: 'MQ', type: 'aws_mq_broker', detail: 'ActiveMQ', tf: 'aws_mq_broker' },
+                { id: 'organizations', label: 'Organizations', type: 'aws_organizations_organization', detail: 'multi-account', tf: 'aws_organizations_organization' },
+                { id: 'pinpoint', label: 'Pinpoint', type: 'aws_pinpoint_app', detail: 'engagement', tf: 'aws_pinpoint_app' },
+                { id: 'prometheus', label: 'Prometheus', type: 'aws_prometheus_workspace', detail: 'AMP metrics', tf: 'aws_prometheus_workspace' },
+                { id: 'ses', label: 'SES', type: 'aws_ses_domain_identity', detail: 'email service', tf: 'aws_ses_domain_identity' },
+                { id: 'sfn', label: 'Step Functions', type: 'aws_sfn_state_machine', detail: 'workflows', tf: 'aws_sfn_state_machine' },
+                { id: 'sns', label: 'SNS', type: 'aws_sns_topic', detail: 'pub/sub', tf: 'aws_sns_topic' },
+                { id: 'sqs', label: 'SQS', type: 'aws_sqs_queue', detail: 'message queue', tf: 'aws_sqs_queue' },
+                { id: 'xray', label: 'X-Ray', type: 'aws_xray_sampling_rule', detail: 'tracing', tf: 'aws_xray_sampling_rule' },
+            ]
+        },
+        {
+            name: 'AI', icon: '*', color: '#a855f7',
+            items: [
+                { id: 'kendra', label: 'Kendra', type: 'aws_kendra_index', detail: 'search', tf: 'aws_kendra_index' },
+                { id: 'lex', label: 'Lex', type: 'aws_lexv2models_bot', detail: 'chatbot', tf: 'aws_lexv2models_bot' },
+                { id: 'sagemaker', label: 'SageMaker', type: 'aws_sagemaker_domain', detail: 'ML platform', tf: 'aws_sagemaker_domain' },
+                { id: 'bedrock', label: 'Bedrock', type: 'aws_bedrock_model_invocation_logging_configuration', detail: 'foundation AI', tf: 'aws_bedrock_model_invocation_logging_configuration' },
+                { id: 'comprehend', label: 'Comprehend', type: 'aws_comprehend_entity_recognizer', detail: 'NLP', tf: 'aws_comprehend_entity_recognizer' },
+                { id: 'rekognition', label: 'Rekognition', type: 'aws_rekognition_project', detail: 'image/video AI', tf: 'aws_rekognition_project' },
             ]
         },
     ];
@@ -71,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { icon: 'MON', name: 'Monitoring Stack', desc: 'CloudWatch dashboards, alarms, and SNS notifications.', tags: ['CloudWatch', 'SNS', 'Logs'], filter: 'compute' },
     ];
 
-    const categoryColors = { Compute: '#ff6b00', Network: '#3b82f6', Database: '#8b5cf6', Storage: '#10b981', Security: '#ef4444' };
+    const categoryColors = { Compute: '#ff6b00', Network: '#3b82f6', Database: '#8b5cf6', Storage: '#10b981', 'Security & Identity': '#ef4444', Security: '#ef4444', Tools: '#f59e0b', AI: '#a855f7' };
 
     const costMap = {
         ec2: 62.05, lambda: 5.00, ecs: 36.50, autoscaling: 120.00, lightsail: 5.00, batch: 0,
