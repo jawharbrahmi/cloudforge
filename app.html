@@ -6,7 +6,7 @@
     <title>CloudForge | Visual Cloud Designer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="app.css?v=7">
+    <link rel="stylesheet" href="app.css?v=8">
 </head>
 <body>
     <div class="app-layout">
@@ -855,25 +855,86 @@
     <div class="modal-overlay" id="module-import-modal">
         <div class="modal">
             <div class="modal-header">
-                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Import Module</h3>
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Import Terraform module</h3>
                 <button class="modal-close" id="module-import-modal-close">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>Module Source <span class="required">*</span></label>
-                    <input type="text" id="module-source-input" placeholder="e.g., terraform-aws-modules/vpc/aws">
+                <p class="import-help-text">Find more information about how to use Terraform modules <a href="https://developer.hashicorp.com/terraform/language/modules" target="_blank" class="link-primary">here</a>.</p>
+
+                <div class="import-top-row">
+                    <div class="form-group import-icon-group">
+                        <label>Icon</label>
+                        <div class="import-icon-picker" id="import-icon-picker">
+                            <div class="import-icon-preview" id="import-icon-preview" style="background:#ff9900;color:#fff;">aws</div>
+                            <svg width="10" height="10" viewBox="0 0 12 12"><path d="M3 5L6 8L9 5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+                        </div>
+                        <div class="import-icon-dropdown" id="import-icon-dropdown">
+                            <div class="iid-option active" data-icon="aws" data-color="#ff9900"><div class="iid-dot" style="background:#ff9900;">aws</div></div>
+                            <div class="iid-option" data-icon="Az" data-color="#0078d4"><div class="iid-dot" style="background:#0078d4;">Az</div></div>
+                            <div class="iid-option" data-icon="GC" data-color="#4285f4"><div class="iid-dot" style="background:#4285f4;">GC</div></div>
+                            <div class="iid-option" data-icon="OCI" data-color="#c74634"><div class="iid-dot" style="background:#c74634;">OCI</div></div>
+                            <div class="iid-option" data-icon="K8s" data-color="#326ce5"><div class="iid-dot" style="background:#326ce5;">K8s</div></div>
+                            <div class="iid-option" data-icon="TF" data-color="#7b42bc"><div class="iid-dot" style="background:#7b42bc;">TF</div></div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Module name <span class="required">*</span></label>
+                        <input type="text" id="module-name-input" placeholder="e.g., my_vpc">
+                        <span class="field-hint field-error" id="module-name-error" style="display:none;">Module name is required</span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Version</label>
-                    <input type="text" id="module-version-input" placeholder="e.g., 5.16.0 (leave empty for latest)">
+
+                <div class="import-source-tabs">
+                    <button class="import-src-tab active" data-src="registry"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> From registry</button>
+                    <button class="import-src-tab" data-src="git"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06"/></svg> From Git</button>
+                    <button class="import-src-tab" data-src="files"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> From files</button>
                 </div>
-                <div class="form-group">
-                    <label>Module Name <span class="required">*</span></label>
-                    <input type="text" id="module-name-input" placeholder="e.g., my_vpc">
+
+                <div class="import-src-content" id="import-src-registry">
+                    <div class="import-row-2col">
+                        <div class="form-group">
+                            <label>Source path <span class="field-dot-required"></span></label>
+                            <input type="text" id="module-source-input" placeholder="e.g., terraform-aws-modules/vpc/aws">
+                            <span class="field-hint">Write the path without quotes</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Module version</label>
+                            <input type="text" id="module-version-input" placeholder="latest" value="latest">
+                        </div>
+                    </div>
+                    <label class="checkbox-row">
+                        <input type="checkbox" id="module-use-creds">
+                        <span>Use terraform registry credentials</span>
+                    </label>
                 </div>
-                <div class="form-actions">
-                    <button class="btn-secondary" id="module-import-cancel">Cancel</button>
-                    <button class="btn-primary-sm" id="module-import-confirm">Import Module</button>
+
+                <div class="import-src-content" id="import-src-git" style="display:none;">
+                    <div class="form-group">
+                        <label>Git repository URL <span class="required">*</span></label>
+                        <input type="text" id="module-git-url" placeholder="e.g., github.com/org/terraform-module">
+                    </div>
+                    <div class="import-row-2col">
+                        <div class="form-group">
+                            <label>Branch / Tag</label>
+                            <input type="text" placeholder="main" value="main">
+                        </div>
+                        <div class="form-group">
+                            <label>Subdirectory</label>
+                            <input type="text" placeholder="/ (root)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="import-src-content" id="import-src-files" style="display:none;">
+                    <div class="upload-zone upload-zone-sm" id="module-file-zone">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <p>Drop .tf files here or click to browse</p>
+                    </div>
+                </div>
+
+                <div class="import-modal-footer">
+                    <button class="btn-secondary" id="module-import-cancel">Close</button>
+                    <button class="btn-primary-sm" id="module-import-confirm">Import</button>
                 </div>
             </div>
         </div>
@@ -956,6 +1017,6 @@ resource "aws_s3_bucket" "data" {
     <!-- Toast -->
     <div class="toast-container" id="toast-container"></div>
 
-    <script src="app.js?v=7"></script>
+    <script src="app.js?v=8"></script>
 </body>
 </html>

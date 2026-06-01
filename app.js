@@ -2659,31 +2659,87 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('module-import-modal').classList.remove('active');
     });
 
-    document.getElementById('module-import-confirm')?.addEventListener('click', () => {
-        const source = document.getElementById('module-source-input')?.value.trim();
-        const version = document.getElementById('module-version-input')?.value.trim();
-        const name = document.getElementById('module-name-input')?.value.trim();
+    // Import source tabs
+    document.querySelectorAll('.import-src-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.import-src-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.import-src-content').forEach(c => c.style.display = 'none');
+            tab.classList.add('active');
+            document.getElementById('import-src-' + tab.dataset.src).style.display = '';
+        });
+    });
 
-        if (!source || !name) {
-            showToast('Please fill in Module Source and Name', 'warning');
+    // Icon picker
+    let selectedModuleIcon = { icon: 'aws', color: '#ff9900' };
+    document.getElementById('import-icon-picker')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('import-icon-dropdown').classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#import-icon-picker')) {
+            document.getElementById('import-icon-dropdown')?.classList.remove('active');
+        }
+    });
+
+    document.querySelectorAll('.iid-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            document.querySelectorAll('.iid-option').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            selectedModuleIcon = { icon: opt.dataset.icon, color: opt.dataset.color };
+            const preview = document.getElementById('import-icon-preview');
+            preview.textContent = opt.dataset.icon;
+            preview.style.background = opt.dataset.color;
+            document.getElementById('import-icon-dropdown').classList.remove('active');
+        });
+    });
+
+    // Module name validation
+    document.getElementById('module-name-input')?.addEventListener('input', (e) => {
+        const err = document.getElementById('module-name-error');
+        if (err) err.style.display = e.target.value.trim() ? 'none' : '';
+    });
+
+    document.getElementById('module-import-confirm')?.addEventListener('click', () => {
+        const name = document.getElementById('module-name-input')?.value.trim();
+        const source = document.getElementById('module-source-input')?.value.trim();
+        const version = document.getElementById('module-version-input')?.value.trim() || 'latest';
+        const gitUrl = document.getElementById('module-git-url')?.value.trim();
+
+        if (!name) {
+            const err = document.getElementById('module-name-error');
+            if (err) err.style.display = '';
+            document.getElementById('module-name-input').style.borderColor = '#ef4444';
+            document.getElementById('module-name-input').focus();
             return;
         }
+
+        const activeTab = document.querySelector('.import-src-tab.active')?.dataset.src;
+        let moduleSource = source || gitUrl || 'local';
 
         document.getElementById('module-import-modal').classList.remove('active');
         openDesigner();
 
-        // Create a module node on canvas
         saveState();
         const moduleResource = {
             id: 'module_' + name,
             label: name,
             type: 'module.' + name,
-            detail: source + (version ? ' v' + version : ''),
+            detail: (activeTab === 'git' ? gitUrl : moduleSource) + (version !== 'latest' ? ' v' + version : ''),
             tf: 'module',
             catName: 'Compute'
         };
         addNodeToCanvas(moduleResource, 200 + Math.random() * 200, 100 + Math.random() * 100);
-        showToast(`Module "${name}" imported from ${source}`, 'success');
+
+        // Update the node icon color
+        const lastNode = canvasNodes[canvasNodes.length - 1];
+        if (lastNode) {
+            lastNode.color = selectedModuleIcon.color;
+            const el = document.getElementById(lastNode.id);
+            if (el) el.querySelector('.node-type-icon').style.background = selectedModuleIcon.color;
+        }
+
+        showToast(`Module "${name}" imported from ${activeTab === 'git' ? 'Git' : activeTab === 'files' ? 'files' : 'registry'}`, 'success');
     });
 
     // ===== INIT =====
