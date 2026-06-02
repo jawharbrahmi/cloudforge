@@ -136,11 +136,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryColors = { Compute: '#ff6b00', Network: '#3b82f6', Database: '#8b5cf6', Storage: '#10b981', 'Security & Identity': '#ef4444', Security: '#ef4444', Tools: '#f59e0b', AI: '#a855f7' };
 
     const costMap = {
+        // Compute
         ec2: 62.05, lambda: 5.00, ecs: 36.50, autoscaling: 120.00, lightsail: 5.00, batch: 0,
+        apprunner: 25.00, beanstalk: 40.00, imagebuilder: 0,
+        // Network
         vpc: 0, subnet: 0, alb: 22.27, route53: 0.50, cloudfront: 15.00, apigateway: 3.50, sg: 0, natgw: 32.40,
+        appmesh: 0, directconnect: 200.00, globalaccelerator: 18.00, networkfirewall: 175.00, networkmanager: 0,
+        transitgw: 36.00, vpn: 36.00,
+        // Database
         rds: 172.80, dynamodb: 25.00, elasticache: 51.84, aurora: 210.00,
+        docdb: 145.00, elasticsearch: 160.00, keyspaces: 15.00, neptune: 145.00, qldb: 25.00,
+        timestream: 30.00, dms: 75.00,
+        // Storage
         s3: 2.30, efs: 30.00, ebs: 8.00,
-        iam_role: 0, iam_policy: 0, kms: 1.00, waf: 10.00
+        glacier: 0.40, backup: 5.00, storagegw: 125.00,
+        // Security & Identity
+        iam_role: 0, iam_policy: 0, kms: 1.00, waf: 10.00,
+        acm: 0, cognito: 5.00, secrets: 0.40, shield: 3000.00, guardduty: 4.00, inspector: 1.50,
+        securityhub: 0, macie: 10.00, detective: 2.00, fms: 100.00, sso: 0,
+        accessanalyzer: 0, auditmanager: 2.50, directoryservice: 72.00,
+        // Tools
+        cloudwatch: 3.00, cloudtrail: 2.00, sns: 0.50, sqs: 0.40, ses: 0.10,
+        codepipeline: 1.00, codebuild: 5.00, codecommit: 0, codedeploy: 0,
+        sfn: 25.00, config: 2.00, budgets: 0, costexplorer: 0,
+        cloudformation: 0, controltower: 0, datasync: 5.00,
+        grafana: 9.00, prometheus: 12.00, xray: 5.00,
+        mq: 80.00, organizations: 0, pinpoint: 0,
+        // AI
+        sagemaker: 100.00, bedrock: 0, kendra: 810.00, lex: 0.75,
+        comprehend: 0, rekognition: 0,
+        // Multi-cloud
+        azure_vm: 70.00, azure_func: 5.00, azure_aks: 72.00, azure_container: 30.00,
+        azure_vnet: 0, azure_subnet: 0, azure_lb: 18.00, azure_appgw: 22.00, azure_nsg: 0,
+        azure_sql: 150.00, azure_cosmos: 25.00, azure_redis: 55.00, azure_postgres: 130.00,
+        azure_storage: 2.00, azure_blob: 2.00,
+        gcp_instance: 50.00, gcp_function: 5.00, gcp_gke: 72.00, gcp_run: 10.00,
+        gcp_vpc: 0, gcp_subnet: 0, gcp_lb: 18.00, gcp_firewall: 0,
+        gcp_sql: 130.00, gcp_spanner: 650.00, gcp_firestore: 10.00, gcp_bigtable: 450.00,
+        gcp_bucket: 2.00, gcp_disk: 8.00,
+        oci_instance: 45.00, oci_container: 60.00, oci_vcn: 0, oci_subnet: 0, oci_lb: 10.00,
+        oci_adb: 200.00, oci_mysql: 100.00, oci_bucket: 2.50,
+        k8s_deploy: 0, k8s_service: 0, k8s_ingress: 0, k8s_configmap: 0, k8s_secret: 0, k8s_ns: 0,
+        k8s_pvc: 0, k8s_pv: 0,
     };
 
     // ===== STATE =====
@@ -921,17 +958,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof addCopyButton === 'function') addCopyButton();
     }
 
+    const providerConfig = {
+        aws: { name: 'aws', source: 'hashicorp/aws', version: '~> 6.47.0', region_key: 'region', region_var: 'var.aws_region' },
+        azure: { name: 'azurerm', source: 'hashicorp/azurerm', version: '~> 4.14.0', region_key: 'features {}\\n\\n  # location', region_var: 'var.azure_location', extra: '  features {}\n' },
+        gcp: { name: 'google', source: 'hashicorp/google', version: '~> 6.12.0', region_key: 'region', region_var: 'var.gcp_region' },
+        oci: { name: 'oci', source: 'oracle/oci', version: '~> 6.18.0', region_key: 'region', region_var: 'var.oci_region' },
+        kubernetes: { name: 'kubernetes', source: 'hashicorp/kubernetes', version: '~> 2.35.0', region_key: 'config_path', region_var: '"~/.kube/config"' },
+        scaleway: { name: 'scaleway', source: 'scaleway/scaleway', version: '~> 2.46.0', region_key: 'region', region_var: 'var.scw_region' },
+        datadog: { name: 'datadog', source: 'DataDog/datadog', version: '~> 3.50.0', region_key: 'api_key', region_var: 'var.datadog_api_key' },
+        cloudflare: { name: 'cloudflare', source: 'cloudflare/cloudflare', version: '~> 4.48.0', region_key: 'api_token', region_var: 'var.cloudflare_api_token' },
+    };
+
     function generateMainTf() {
+        const prov = providerConfig[activeProvider] || providerConfig.aws;
         let code = `<span class="c-comment"># CloudForge - Auto-generated Terraform</span>\n`;
-        code += `<span class="c-comment"># Generated ${canvasNodes.length} resource(s)</span>\n\n`;
+        code += `<span class="c-comment"># Generated ${canvasNodes.length} resource(s) | Provider: ${activeProvider.toUpperCase()}</span>\n\n`;
         code += `<span class="c-keyword">terraform</span> {\n`;
         code += `  <span class="c-key">required_providers</span> {\n`;
-        code += `    <span class="c-key">aws</span> = {\n`;
-        code += `      <span class="c-key">source</span>  = <span class="c-string">"hashicorp/aws"</span>\n`;
-        code += `      <span class="c-key">version</span> = <span class="c-string">"~> 6.47.0"</span>\n`;
+        code += `    <span class="c-key">${prov.name}</span> = {\n`;
+        code += `      <span class="c-key">source</span>  = <span class="c-string">"${prov.source}"</span>\n`;
+        code += `      <span class="c-key">version</span> = <span class="c-string">"${prov.version}"</span>\n`;
         code += `    }\n  }\n}\n\n`;
-        code += `<span class="c-keyword">provider</span> <span class="c-string">"aws"</span> {\n`;
-        code += `  <span class="c-key">region</span> = <span class="c-value">var.aws_region</span>\n}\n`;
+        code += `<span class="c-keyword">provider</span> <span class="c-string">"${prov.name}"</span> {\n`;
+        if (prov.extra) code += `  ${prov.extra}`;
+        code += `  <span class="c-key">${prov.region_key.replace(/\\n/g, '\n')}</span> = <span class="c-value">${prov.region_var}</span>\n}\n`;
 
         canvasNodes.forEach(node => {
             code += `\n<div class="code-block" data-node-id="${node.id}" id="code-${node.id}">`;
@@ -949,11 +999,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const V = (v) => `<span class="c-value">${v}</span>`;
         const C = (c) => `<span class="c-comment"># ${c}</span>`;
 
-        let code = `${C('=== CloudForge Auto-generated Variables ===')}\n${C(`Generated for ${canvasNodes.length} resource(s)`)}\n\n`;
+        const regionVarMap = {
+            aws: { name: 'aws_region', desc: 'AWS region for all resources', def: 'us-east-1' },
+            azure: { name: 'azure_location', desc: 'Azure location for all resources', def: 'eastus' },
+            gcp: { name: 'gcp_region', desc: 'GCP region for all resources', def: 'us-central1' },
+            oci: { name: 'oci_region', desc: 'OCI region for all resources', def: 'us-ashburn-1' },
+            kubernetes: { name: 'kube_config_path', desc: 'Path to kubeconfig file', def: '~/.kube/config' },
+            scaleway: { name: 'scw_region', desc: 'Scaleway region for all resources', def: 'fr-par' },
+        };
+        const rv = regionVarMap[activeProvider] || regionVarMap.aws;
 
-        // Core variables always present
+        let code = `${C('=== CloudForge Auto-generated Variables ===')}\n${C(`Generated for ${canvasNodes.length} resource(s) | Provider: ${activeProvider.toUpperCase()}`)}\n\n`;
+
         code += `${C('--- Core Configuration ---')}\n\n`;
-        code += `<span class="c-keyword">variable</span> ${S('aws_region')} {\n  ${K('description')} = ${S('AWS region for all resources')}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S('us-east-1')}\n}\n`;
+        code += `<span class="c-keyword">variable</span> ${S(rv.name)} {\n  ${K('description')} = ${S(rv.desc)}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S(rv.def)}\n}\n`;
         code += `\n<span class="c-keyword">variable</span> ${S('environment')} {\n  ${K('description')} = ${S('Deployment environment (development, staging, production)')}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S('development')}\n\n  ${K('validation')} {\n    ${K('condition')}     = ${V('contains(["development", "staging", "production"], var.environment)')}\n    ${K('error_message')} = ${S('Environment must be development, staging, or production.')}\n  }\n}\n`;
         code += `\n<span class="c-keyword">variable</span> ${S('project_name')} {\n  ${K('description')} = ${S('Project name used for resource naming and tagging')}\n  ${K('type')}        = ${V('string')}\n  ${K('default')}     = ${S('cloudforge')}\n}\n`;
 
@@ -1067,6 +1126,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case 'elasticache':
                 return `  ${K('cluster_id')}           = ${S(node.name)}\n  ${K('engine')}               = ${S('redis')}\n  ${K('engine_version')}       = ${S('7.0')}\n  ${K('node_type')}            = ${S('cache.r6g.large')}\n  ${K('num_cache_nodes')}      = ${V('1')}\n  ${K('port')}                 = ${V('6379')}\n  ${K('parameter_group_name')} = ${S('default.redis7')}\n\n  ${K('snapshot_retention_limit')} = ${V('5')}\n  ${K('at_rest_encryption_enabled')} = ${V('true')}\n  ${K('transit_encryption_enabled')} = ${V('true')}\n${tags}`;
+
+            case 'sns':
+                return `  ${K('name')}                        = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('kms_master_key_id')}           = ${S('alias/aws/sns')}\n  ${K('fifo_topic')}                  = ${V('false')}\n\n  ${K('delivery_policy')} = ${V('jsonencode')}({\n    ${K('http')} = {\n      ${K('defaultHealthyRetryPolicy')} = {\n        ${K('minDelayTarget')}     = ${V('20')}\n        ${K('maxDelayTarget')}     = ${V('20')}\n        ${K('numRetries')}         = ${V('3')}\n        ${K('numNoDelayRetries')}   = ${V('0')}\n        ${K('backoffFunction')}    = ${S('linear')}\n      }\n    }\n  })\n${tags}`;
+
+            case 'sqs':
+                return `  ${K('name')}                       = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('delay_seconds')}              = ${V('0')}\n  ${K('max_message_size')}           = ${V('262144')}\n  ${K('message_retention_seconds')}  = ${V('345600')}\n  ${K('visibility_timeout_seconds')} = ${V('60')}\n  ${K('receive_wait_time_seconds')}  = ${V('10')}\n\n  ${K('sqs_managed_sse_enabled')} = ${V('true')}\n\n  ${K('redrive_policy')} = ${V('jsonencode')}({\n    ${K('deadLetterTargetArn')} = ${V(`aws_sqs_queue.${n}_dlq.arn`)}\n    ${K('maxReceiveCount')}     = ${V('3')}\n  })\n${tags}`;
+
+            case 'cloudwatch':
+                return `  ${K('name')}              = ${S(`/\${var.project_name}/${node.name}`)}\n  ${K('retention_in_days')} = ${V('var.environment == "production" ? 365 : 30')}\n\n  ${K('kms_key_id')} = ${V('var.kms_key_arn')}\n${tags}`;
+
+            case 'cloudtrail':
+                return `  ${K('name')}                          = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('s3_bucket_name')}                = ${V('var.cloudtrail_bucket')}\n  ${K('include_global_service_events')} = ${V('true')}\n  ${K('is_multi_region_trail')}         = ${V('true')}\n  ${K('enable_logging')}                = ${V('true')}\n  ${K('enable_log_file_validation')}    = ${V('true')}\n\n  ${K('cloud_watch_logs_group_arn')} = ${V('"\${aws_cloudwatch_log_group.trail.arn}:*"')}\n  ${K('cloud_watch_logs_role_arn')}  = ${V('aws_iam_role.cloudtrail.arn')}\n\n  ${K('event_selector')} {\n    ${K('read_write_type')}           = ${S('All')}\n    ${K('include_management_events')} = ${V('true')}\n  }\n${tags}`;
+
+            case 'codepipeline':
+                return `  ${K('name')}     = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('role_arn')} = ${V('aws_iam_role.codepipeline.arn')}\n\n  ${K('artifact_store')} {\n    ${K('location')} = ${V('aws_s3_bucket.artifacts.bucket')}\n    ${K('type')}     = ${S('S3')}\n  }\n\n  ${K('stage')} {\n    ${K('name')} = ${S('Source')}\n    ${K('action')} {\n      ${K('name')}             = ${S('Source')}\n      ${K('category')}         = ${S('Source')}\n      ${K('owner')}            = ${S('AWS')}\n      ${K('provider')}         = ${S('CodeStarSourceConnection')}\n      ${K('version')}          = ${S('1')}\n      ${K('output_artifacts')} = [${S('source_output')}]\n    }\n  }\n\n  ${K('stage')} {\n    ${K('name')} = ${S('Build')}\n    ${K('action')} {\n      ${K('name')}             = ${S('Build')}\n      ${K('category')}         = ${S('Build')}\n      ${K('owner')}            = ${S('AWS')}\n      ${K('provider')}         = ${S('CodeBuild')}\n      ${K('version')}          = ${S('1')}\n      ${K('input_artifacts')}  = [${S('source_output')}]\n      ${K('output_artifacts')} = [${S('build_output')}]\n    }\n  }\n\n  ${K('stage')} {\n    ${K('name')} = ${S('Deploy')}\n    ${K('action')} {\n      ${K('name')}            = ${S('Deploy')}\n      ${K('category')}        = ${S('Deploy')}\n      ${K('owner')}           = ${S('AWS')}\n      ${K('provider')}        = ${S('ECS')}\n      ${K('version')}         = ${S('1')}\n      ${K('input_artifacts')} = [${S('build_output')}]\n    }\n  }\n${tags}`;
+
+            case 'codebuild':
+                return `  ${K('name')}          = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('service_role')}  = ${V('aws_iam_role.codebuild.arn')}\n  ${K('build_timeout')} = ${V('30')}\n\n  ${K('artifacts')} {\n    ${K('type')} = ${S('CODEPIPELINE')}\n  }\n\n  ${K('environment')} {\n    ${K('compute_type')}                = ${S('BUILD_GENERAL1_MEDIUM')}\n    ${K('image')}                       = ${S('aws/codebuild/amazonlinux2-x86_64-standard:5.0')}\n    ${K('type')}                        = ${S('LINUX_CONTAINER')}\n    ${K('privileged_mode')}             = ${V('true')}\n    ${K('image_pull_credentials_type')} = ${S('CODEBUILD')}\n  }\n\n  ${K('source')} {\n    ${K('type')}      = ${S('CODEPIPELINE')}\n    ${K('buildspec')} = ${S('buildspec.yml')}\n  }\n\n  ${K('logs_config')} {\n    ${K('cloudwatch_logs')} {\n      ${K('group_name')} = ${S(`/codebuild/\${var.project_name}`)}\n    }\n  }\n${tags}`;
+
+            case 'route53':
+                return `  ${K('name')} = ${V('var.domain_name')}\n\n  ${K('comment')} = ${S(`DNS zone for ${node.name} - Managed by CloudForge`)}\n${tags}`;
+
+            case 'sfn':
+                return `  ${K('name')}     = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('role_arn')} = ${V('aws_iam_role.step_functions.arn')}\n  ${K('type')}     = ${S('STANDARD')}\n\n  ${K('definition')} = ${V('jsonencode')}({\n    ${K('Comment')} = ${S(`State machine for ${node.name}`)}\n    ${K('StartAt')} = ${S('FirstState')}\n    ${K('States')} = {\n      ${K('FirstState')} = {\n        ${K('Type')}     = ${S('Task')}\n        ${K('Resource')} = ${S('arn:aws:states:::lambda:invoke')}\n        ${K('End')}      = ${V('true')}\n      }\n    }\n  })\n\n  ${K('logging_configuration')} {\n    ${K('log_destination')}        = ${S(`\${aws_cloudwatch_log_group.sfn.arn}:*`)}\n    ${K('include_execution_data')} = ${V('true')}\n    ${K('level')}                  = ${S('ALL')}\n  }\n${tags}`;
+
+            case 'ses':
+                return `  ${K('domain')} = ${V('var.domain_name')}\n${tags}`;
+
+            case 'sagemaker':
+                return `  ${K('domain_name')}             = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('auth_mode')}               = ${S('IAM')}\n  ${K('vpc_id')}                  = ${vpcRef ? V(`aws_vpc.${vpcRef.name.replace(/-/g,'_')}.id`) : S('vpc-xxxxx')}\n  ${K('subnet_ids')}              = ${V('var.private_subnet_ids')}\n\n  ${K('default_user_settings')} {\n    ${K('execution_role')} = ${V('aws_iam_role.sagemaker.arn')}\n  }\n${tags}`;
+
+            case 'bedrock':
+                return `  ${C('Bedrock model invocation logging')}\n  ${K('logging_config')} {\n    ${K('embedding_data_delivery_enabled')} = ${V('true')}\n    ${K('image_data_delivery_enabled')}     = ${V('true')}\n    ${K('text_data_delivery_enabled')}      = ${V('true')}\n\n    ${K('s3_configuration')} {\n      ${K('bucket_name')} = ${V('aws_s3_bucket.bedrock_logs.id')}\n      ${K('key_prefix')}  = ${S('bedrock-logs')}\n    }\n\n    ${K('cloudwatch_configuration')} {\n      ${K('log_group_name')} = ${V('aws_cloudwatch_log_group.bedrock.name')}\n    }\n  }\n`;
+
+            case 'guardduty':
+                return `  ${K('enable')} = ${V('true')}\n\n  ${K('datasources')} {\n    ${K('s3_logs')} {\n      ${K('enable')} = ${V('true')}\n    }\n    ${K('kubernetes')} {\n      ${K('audit_logs')} {\n        ${K('enable')} = ${V('true')}\n      }\n    }\n    ${K('malware_protection')} {\n      ${K('scan_ec2_instance_with_findings')} {\n        ${K('ebs_volumes')} {\n          ${K('enable')} = ${V('true')}\n        }\n      }\n    }\n  }\n${tags}`;
+
+            case 'secrets':
+                return `  ${K('name')}                    = ${S(`\${var.project_name}/${node.name}`)}\n  ${K('description')}             = ${S(`Secret for ${node.name} - Managed by CloudForge`)}\n  ${K('recovery_window_in_days')} = ${V('7')}\n  ${K('kms_key_id')}              = ${V('var.kms_key_arn')}\n${tags}`;
+
+            case 'config':
+                return `  ${K('name')}     = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('role_arn')} = ${V('aws_iam_role.config.arn')}\n\n  ${K('recording_group')} {\n    ${K('all_supported')}                 = ${V('true')}\n    ${K('include_global_resource_types')} = ${V('true')}\n  }\n`;
+
+            case 'budgets':
+                return `  ${K('name')}         = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('budget_type')}  = ${S('COST')}\n  ${K('limit_amount')} = ${S('1000')}\n  ${K('limit_unit')}   = ${S('USD')}\n  ${K('time_unit')}    = ${S('MONTHLY')}\n\n  ${K('notification')} {\n    ${K('comparison_operator')}        = ${S('GREATER_THAN')}\n    ${K('threshold')}                  = ${V('80')}\n    ${K('threshold_type')}             = ${S('PERCENTAGE')}\n    ${K('notification_type')}          = ${S('ACTUAL')}\n    ${K('subscriber_email_addresses')} = [${V('var.alert_email')}]\n  }\n`;
+
+            case 'mq':
+                return `  ${K('broker_name')}        = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('engine_type')}        = ${S('ActiveMQ')}\n  ${K('engine_version')}     = ${S('5.17.6')}\n  ${K('host_instance_type')} = ${S('mq.m5.large')}\n  ${K('deployment_mode')}    = ${S('ACTIVE_STANDBY_MULTI_AZ')}\n  ${K('publicly_accessible')} = ${V('false')}\n  ${K('auto_minor_version_upgrade')} = ${V('true')}\n\n  ${K('user')} {\n    ${K('username')} = ${V('var.mq_username')}\n    ${K('password')} = ${V('var.mq_password')}\n  }\n${tags}`;
+
+            case 'elasticsearch':
+                return `  ${K('domain_name')}           = ${S(node.name)}\n  ${K('elasticsearch_version')} = ${S('OpenSearch_2.11')}\n\n  ${K('cluster_config')} {\n    ${K('instance_type')}          = ${S('r6g.large.search')}\n    ${K('instance_count')}         = ${V('2')}\n    ${K('zone_awareness_enabled')} = ${V('true')}\n  }\n\n  ${K('ebs_options')} {\n    ${K('ebs_enabled')} = ${V('true')}\n    ${K('volume_size')} = ${V('100')}\n    ${K('volume_type')} = ${S('gp3')}\n  }\n\n  ${K('encrypt_at_rest')} {\n    ${K('enabled')} = ${V('true')}\n  }\n\n  ${K('node_to_node_encryption')} {\n    ${K('enabled')} = ${V('true')}\n  }\n${tags}`;
+
+            case 'docdb':
+                return `  ${K('cluster_identifier')}    = ${S(node.name)}\n  ${K('engine')}               = ${S('docdb')}\n  ${K('master_username')}      = ${V('var.docdb_username')}\n  ${K('master_password')}      = ${V('var.docdb_password')}\n  ${K('backup_retention_period')} = ${V('5')}\n  ${K('preferred_backup_window')} = ${S('07:00-09:00')}\n  ${K('skip_final_snapshot')}  = ${V('var.environment != "production"')}\n  ${K('storage_encrypted')}    = ${V('true')}\n${tags}`;
+
+            case 'cognito':
+                return `  ${K('name')} = ${S(`\${var.project_name}-${node.name}`)}\n\n  ${K('password_policy')} {\n    ${K('minimum_length')}    = ${V('12')}\n    ${K('require_lowercase')} = ${V('true')}\n    ${K('require_numbers')}   = ${V('true')}\n    ${K('require_symbols')}   = ${V('true')}\n    ${K('require_uppercase')} = ${V('true')}\n  }\n\n  ${K('auto_verified_attributes')} = [${S('email')}]\n\n  ${K('account_recovery_setting')} {\n    ${K('recovery_mechanism')} {\n      ${K('name')}     = ${S('verified_email')}\n      ${K('priority')} = ${V('1')}\n    }\n  }\n\n  ${K('schema')} {\n    ${K('name')}                = ${S('email')}\n    ${K('attribute_data_type')} = ${S('String')}\n    ${K('required')}            = ${V('true')}\n    ${K('mutable')}             = ${V('true')}\n  }\n${tags}`;
+
+            case 'waf':
+                return `  ${K('name')}        = ${S(`\${var.project_name}-${node.name}`)}\n  ${K('description')} = ${S('WAF for ${node.name} - Managed by CloudForge')}\n  ${K('scope')}       = ${S('REGIONAL')}\n\n  ${K('default_action')} {\n    ${K('allow')} {}\n  }\n\n  ${K('rule')} {\n    ${K('name')}     = ${S('RateLimit')}\n    ${K('priority')} = ${V('1')}\n    ${K('action')} { ${K('block')} {} }\n    ${K('statement')} {\n      ${K('rate_based_statement')} {\n        ${K('limit')}              = ${V('2000')}\n        ${K('aggregate_key_type')} = ${S('IP')}\n      }\n    }\n    ${K('visibility_config')} {\n      ${K('cloudwatch_metrics_enabled')} = ${V('true')}\n      ${K('metric_name')}                = ${S('RateLimit')}\n      ${K('sampled_requests_enabled')}   = ${V('true')}\n    }\n  }\n\n  ${K('visibility_config')} {\n    ${K('cloudwatch_metrics_enabled')} = ${V('true')}\n    ${K('metric_name')}                = ${S(node.name)}\n    ${K('sampled_requests_enabled')}   = ${V('true')}\n  }\n${tags}`;
 
             default:
                 return `  ${C('Configure ' + r.label + ' settings')}\n${tags}`;
@@ -1297,15 +1416,46 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         document.getElementById('prop-save-btn')?.addEventListener('click', () => {
+            saveState();
             const newName = document.getElementById('prop-name')?.value;
             if (newName && newName !== node.name) {
-                saveState();
                 node.name = newName;
                 const el = document.getElementById(node.id);
                 if (el) el.querySelector('.node-name').textContent = newName;
-                updateCode();
-                saveToLocalStorage();
             }
+
+            const propSection = propsBody.querySelector('.prop-section:nth-child(3)');
+            if (propSection) {
+                const selects = propSection.querySelectorAll('select');
+                const inputs = propSection.querySelectorAll('input:not([readonly])');
+                const updates = [];
+                selects.forEach(s => updates.push({ label: s.closest('.prop-row')?.querySelector('label')?.textContent, value: s.value }));
+                inputs.forEach(inp => updates.push({ label: inp.closest('.prop-row')?.querySelector('label')?.textContent, value: inp.value }));
+
+                updates.forEach(u => {
+                    if (!u.label) return;
+                    const lbl = u.label.trim().toLowerCase();
+                    if (lbl === 'instance type' && node.resource.id === 'ec2') node.detail = u.value;
+                    if (lbl === 'engine' && node.resource.id === 'rds') node.detail = u.value;
+                    if (lbl === 'instance class') node.detail = u.value;
+                    if (lbl === 'runtime' && node.resource.id === 'lambda') node.detail = u.value;
+                    if (lbl === 'scheme' && node.resource.id === 'alb') node.detail = u.value;
+                    if (lbl === 'cidr block' && node.resource.id === 'vpc') node.detail = u.value;
+                    if (lbl === 'access' && node.resource.id === 's3') node.detail = u.value.toLowerCase();
+                    if (lbl === 'memory (mb)' && node.resource.id === 'lambda') node.resource.memory = u.value;
+                    if (lbl === 'timeout (s)' && node.resource.id === 'lambda') node.resource.timeout = u.value;
+                    if (lbl === 'storage (gb)' && node.resource.id === 'rds') node.resource.storage = u.value;
+                    if (lbl === 'multi-az' && node.resource.id === 'rds') node.resource.multiAz = u.value === 'Yes';
+                    if (lbl === 'versioning' && node.resource.id === 's3') node.resource.versioning = u.value === 'Enabled';
+                    if (lbl === 'detail') node.detail = u.value;
+                });
+
+                const el = document.getElementById(node.id);
+                if (el) el.querySelector('.node-detail').textContent = node.detail;
+            }
+
+            updateCode();
+            saveToLocalStorage();
             propsPanel.classList.remove('active');
             showToast('Properties saved', 'success');
         });
@@ -1433,21 +1583,100 @@ document.addEventListener('DOMContentLoaded', () => {
         aiModal.classList.remove('active');
         showToast('Generating architecture...', 'info');
 
+        const p = prompt.toLowerCase();
+
+        const resourcePool = {
+            vpc: { id: 'vpc', label: 'VPC', type: 'aws_vpc', detail: '10.0.0.0/16', tf: 'aws_vpc', catName: 'Network' },
+            subnet: { id: 'subnet', label: 'Subnet', type: 'aws_subnet', detail: 'public', tf: 'aws_subnet', catName: 'Network' },
+            sg: { id: 'sg', label: 'Sec Group', type: 'aws_security_group', detail: 'ingress/egress', tf: 'aws_security_group', catName: 'Security' },
+            ec2: { id: 'ec2', label: 'EC2', type: 'aws_instance', detail: 't3.large', tf: 'aws_instance', catName: 'Compute' },
+            alb: { id: 'alb', label: 'ALB', type: 'aws_lb', detail: 'internet-facing', tf: 'aws_lb', catName: 'Network' },
+            rds: { id: 'rds', label: 'RDS', type: 'aws_db_instance', detail: 'PostgreSQL', tf: 'aws_db_instance', catName: 'Database' },
+            s3: { id: 's3', label: 'S3', type: 'aws_s3_bucket', detail: 'private', tf: 'aws_s3_bucket', catName: 'Storage' },
+            lambda: { id: 'lambda', label: 'Lambda', type: 'aws_lambda_function', detail: 'Node.js 20', tf: 'aws_lambda_function', catName: 'Compute' },
+            apigateway: { id: 'apigateway', label: 'API Gateway', type: 'aws_api_gateway_rest_api', detail: 'REST', tf: 'aws_api_gateway_rest_api', catName: 'Network' },
+            dynamodb: { id: 'dynamodb', label: 'DynamoDB', type: 'aws_dynamodb_table', detail: 'on-demand', tf: 'aws_dynamodb_table', catName: 'Database' },
+            cloudfront: { id: 'cloudfront', label: 'CloudFront', type: 'aws_cloudfront_distribution', detail: 'CDN', tf: 'aws_cloudfront_distribution', catName: 'Network' },
+            ecs: { id: 'ecs', label: 'ECS', type: 'aws_ecs_cluster', detail: 'Fargate', tf: 'aws_ecs_cluster', catName: 'Compute' },
+            autoscaling: { id: 'autoscaling', label: 'AutoScaling', type: 'aws_autoscaling_group', detail: '2-10 instances', tf: 'aws_autoscaling_group', catName: 'Compute' },
+            natgw: { id: 'natgw', label: 'NAT GW', type: 'aws_nat_gateway', detail: 'elastic IP', tf: 'aws_nat_gateway', catName: 'Network' },
+            iam_role: { id: 'iam_role', label: 'IAM Role', type: 'aws_iam_role', detail: 'service role', tf: 'aws_iam_role', catName: 'Security' },
+            kms: { id: 'kms', label: 'KMS', type: 'aws_kms_key', detail: 'symmetric', tf: 'aws_kms_key', catName: 'Security' },
+            cloudwatch: { id: 'cloudwatch', label: 'CloudWatch', type: 'aws_cloudwatch_log_group', detail: 'monitoring', tf: 'aws_cloudwatch_log_group', catName: 'Tools' },
+            sns: { id: 'sns', label: 'SNS', type: 'aws_sns_topic', detail: 'pub/sub', tf: 'aws_sns_topic', catName: 'Tools' },
+            sqs: { id: 'sqs', label: 'SQS', type: 'aws_sqs_queue', detail: 'message queue', tf: 'aws_sqs_queue', catName: 'Tools' },
+            elasticache: { id: 'elasticache', label: 'ElastiCache', type: 'aws_elasticache_cluster', detail: 'Redis', tf: 'aws_elasticache_cluster', catName: 'Database' },
+            waf: { id: 'waf', label: 'WAF', type: 'aws_wafv2_web_acl', detail: 'web firewall', tf: 'aws_wafv2_web_acl', catName: 'Security' },
+            cognito: { id: 'cognito', label: 'Cognito', type: 'aws_cognito_user_pool', detail: 'user pool', tf: 'aws_cognito_user_pool', catName: 'Security' },
+            route53: { id: 'route53', label: 'Route53', type: 'aws_route53_zone', detail: 'DNS', tf: 'aws_route53_zone', catName: 'Network' },
+            sagemaker: { id: 'sagemaker', label: 'SageMaker', type: 'aws_sagemaker_domain', detail: 'ML platform', tf: 'aws_sagemaker_domain', catName: 'AI' },
+            sfn: { id: 'sfn', label: 'Step Functions', type: 'aws_sfn_state_machine', detail: 'workflows', tf: 'aws_sfn_state_machine', catName: 'Tools' },
+            ebs: { id: 'ebs', label: 'EBS', type: 'aws_ebs_volume', detail: 'gp3, 100GB', tf: 'aws_ebs_volume', catName: 'Storage' },
+            efs: { id: 'efs', label: 'File System', type: 'aws_efs_file_system', detail: 'EFS', tf: 'aws_efs_file_system', catName: 'Storage' },
+        };
+
+        const selected = [];
+        const add = (key) => { if (resourcePool[key] && !selected.find(s => s.id === key)) selected.push({ ...resourcePool[key] }); };
+
+        const isServerless = p.includes('serverless') || p.includes('lambda');
+        const isContainer = p.includes('container') || p.includes('ecs') || p.includes('fargate') || p.includes('docker') || p.includes('kubernetes') || p.includes('k8s');
+        const isWebApp = p.includes('web') || p.includes('website') || p.includes('application') || p.includes('app');
+        const isApi = p.includes('api') || p.includes('rest') || p.includes('graphql') || p.includes('endpoint');
+        const isDataLake = p.includes('data lake') || p.includes('analytics') || p.includes('data pipeline');
+        const isMl = p.includes('ml') || p.includes('machine learning') || p.includes('ai') || p.includes('sagemaker');
+        const isQueue = p.includes('queue') || p.includes('event') || p.includes('messaging') || p.includes('pub/sub');
+
+        add('vpc'); add('subnet'); add('sg');
+
+        if (isServerless) {
+            add('apigateway'); add('lambda'); add('dynamodb'); add('iam_role'); add('cloudwatch');
+            if (p.includes('auth')) add('cognito');
+            if (p.includes('queue') || p.includes('sqs')) add('sqs');
+            if (p.includes('notification') || p.includes('sns')) add('sns');
+        } else if (isContainer) {
+            add('ecs'); add('alb'); add('rds'); add('cloudwatch'); add('iam_role');
+            if (p.includes('redis') || p.includes('cache')) add('elasticache');
+            if (p.includes('auto') || p.includes('scaling')) add('autoscaling');
+        } else if (isDataLake) {
+            add('s3'); add('kms'); add('iam_role'); add('lambda'); add('dynamodb'); add('cloudwatch');
+        } else if (isMl) {
+            add('sagemaker'); add('s3'); add('iam_role'); add('ec2'); add('ebs');
+        } else if (isQueue) {
+            add('sqs'); add('sns'); add('lambda'); add('cloudwatch'); add('iam_role');
+            if (p.includes('step') || p.includes('workflow')) add('sfn');
+        } else if (isApi && !isWebApp) {
+            add('apigateway'); add('lambda'); add('dynamodb'); add('cloudwatch'); add('iam_role');
+            if (p.includes('auth')) add('cognito');
+        } else {
+            add('alb'); add('ec2'); add('rds'); add('s3'); add('iam_role');
+            if (p.includes('auto') || p.includes('scaling')) add('autoscaling');
+        }
+
+        if (p.includes('cdn') || p.includes('cloudfront') || p.includes('static')) add('cloudfront');
+        if (p.includes('s3') || p.includes('storage') || p.includes('bucket') || p.includes('static') || p.includes('asset')) add('s3');
+        if ((p.includes('rds') || p.includes('database') || p.includes('postgres') || p.includes('mysql') || p.includes('db')) && !isServerless) add('rds');
+        if (p.includes('redis') || p.includes('cache') || p.includes('elasticache')) add('elasticache');
+        if (p.includes('dns') || p.includes('domain') || p.includes('route53')) add('route53');
+        if (p.includes('nat')) add('natgw');
+        if (p.includes('waf') || p.includes('firewall') || p.includes('ddos')) add('waf');
+        if (p.includes('monitor') || p.includes('log') || p.includes('cloudwatch')) add('cloudwatch');
+        if (p.includes('encrypt') || p.includes('kms')) add('kms');
+        if (p.includes('queue') || p.includes('sqs')) add('sqs');
+        if (p.includes('notification') || p.includes('sns') || p.includes('topic')) add('sns');
+        if (p.includes('auth') || p.includes('cognito') || p.includes('user pool')) add('cognito');
+
+        const cols = Math.ceil(Math.sqrt(selected.length));
+        const aiResources = selected.map((res, i) => ({
+            resource: res,
+            x: 60 + (i % cols) * 240,
+            y: 40 + Math.floor(i / cols) * 140,
+        }));
+
         setTimeout(() => {
             saveState();
             canvasNodes = [];
             connections = [];
             canvasArea.querySelectorAll('.canvas-node').forEach(n => n.remove());
-
-            const aiResources = [
-                { resource: { id: 'vpc', label: 'VPC', type: 'aws_vpc', detail: '10.0.0.0/16', tf: 'aws_vpc', catName: 'Network' }, x: 60, y: 40 },
-                { resource: { id: 'subnet', label: 'Subnet', type: 'aws_subnet', detail: 'public', tf: 'aws_subnet', catName: 'Network' }, x: 60, y: 180 },
-                { resource: { id: 'alb', label: 'ALB', type: 'aws_lb', detail: 'internet-facing', tf: 'aws_lb', catName: 'Network' }, x: 300, y: 40 },
-                { resource: { id: 'ec2', label: 'EC2', type: 'aws_instance', detail: 't3.large', tf: 'aws_instance', catName: 'Compute' }, x: 300, y: 180 },
-                { resource: { id: 'rds', label: 'RDS', type: 'aws_db_instance', detail: 'PostgreSQL', tf: 'aws_db_instance', catName: 'Database' }, x: 540, y: 40 },
-                { resource: { id: 's3', label: 'S3', type: 'aws_s3_bucket', detail: 'private', tf: 'aws_s3_bucket', catName: 'Storage' }, x: 540, y: 180 },
-                { resource: { id: 'sg', label: 'Sec Group', type: 'aws_security_group', detail: 'ingress/egress', tf: 'aws_security_group', catName: 'Security' }, x: 780, y: 110 },
-            ];
 
             let delay = 0;
             aiResources.forEach(r => {
@@ -1456,7 +1685,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             setTimeout(() => {
-                // Auto-create connections
                 const ids = canvasNodes.map(n => n.id);
                 if (ids.length >= 2) {
                     for (let i = 0; i < ids.length - 1; i++) {
@@ -1469,7 +1697,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     drawConnections();
                     updateStatusBar();
                 }
-                showToast(`Architecture generated! ${aiResources.length} resources added.`, 'success');
+                showToast(`Architecture generated! ${aiResources.length} resources based on your prompt.`, 'success');
                 saveToLocalStorage();
             }, delay + 300);
         }, 800);
@@ -1801,6 +2029,14 @@ document.addEventListener('DOMContentLoaded', () => {
         { icon: '+', name: 'Create Architecture', desc: 'Start new', action: () => { cmdOverlay.classList.remove('active'); openCreateModal(); } },
         { icon: 'AI', name: 'AI Generate', desc: 'Generate with AI', action: () => { cmdOverlay.classList.remove('active'); openDesigner(); aiModal.classList.add('active'); } },
         { icon: 'D', name: 'Toggle Dark Mode', desc: 'Switch theme', action: () => { cmdOverlay.classList.remove('active'); toggleTheme(); } },
+        { icon: 'TF', name: 'Export Terraform', desc: 'Download .tf files', action: () => { cmdOverlay.classList.remove('active'); document.getElementById('export-tf')?.click(); } },
+        { icon: 'JS', name: 'Export JSON', desc: 'Download blueprint JSON', action: () => { cmdOverlay.classList.remove('active'); document.getElementById('export-json')?.click(); } },
+        { icon: 'IM', name: 'Import Terraform', desc: 'Paste HCL code', action: () => { cmdOverlay.classList.remove('active'); document.getElementById('import-modal')?.classList.add('active'); } },
+        { icon: 'UP', name: 'Upload Diagram', desc: 'Analyze architecture image', action: () => { cmdOverlay.classList.remove('active'); document.getElementById('upload-diagram-modal')?.classList.add('active'); } },
+        { icon: 'MD', name: 'Module Catalog', desc: 'Browse Terraform modules', action: () => { cmdOverlay.classList.remove('active'); document.getElementById('catalog-modal')?.classList.add('active'); } },
+        { icon: 'SH', name: 'Share Architecture', desc: 'Copy share link', action: () => { cmdOverlay.classList.remove('active'); document.getElementById('share-btn')?.click(); } },
+        { icon: 'PL', name: 'Run Plan', desc: 'Terraform plan', action: () => { cmdOverlay.classList.remove('active'); runPlan(); } },
+        { icon: '?', name: 'Keyboard Shortcuts', desc: 'View all shortcuts', action: () => { cmdOverlay.classList.remove('active'); document.getElementById('shortcuts-modal')?.classList.add('active'); } },
     ];
 
     function renderCmdResults(filter = '') {
@@ -1861,7 +2097,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('export-tf')?.addEventListener('click', () => {
         document.getElementById('export-modal').classList.remove('active');
-        showToast('Terraform files downloaded', 'success');
+        if (canvasNodes.length === 0) { showToast('Add resources first', 'warning'); return; }
+
+        function stripHtml(html) {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || '';
+        }
+
+        const mainTf = stripHtml(generateMainTf());
+        const varsTf = stripHtml(generateVariablesTf());
+        const outTf = stripHtml(generateOutputsTf());
+
+        const files = [
+            { name: 'main.tf', content: mainTf },
+            { name: 'variables.tf', content: varsTf },
+            { name: 'outputs.tf', content: outTf },
+        ];
+
+        files.forEach(f => {
+            const blob = new Blob([f.content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = f.name;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        showToast('Terraform files downloaded (main.tf, variables.tf, outputs.tf)', 'success');
     });
 
     document.getElementById('export-json')?.addEventListener('click', () => {
@@ -1879,13 +2143,221 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('export-diagram')?.addEventListener('click', () => {
         document.getElementById('export-modal').classList.remove('active');
+        if (canvasNodes.length === 0) { showToast('Add resources first', 'warning'); return; }
+
+        const origTransform = canvasArea.style.transform;
+        canvasArea.style.transform = 'none';
+
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        canvasNodes.forEach(n => {
+            const el = document.getElementById(n.id);
+            if (!el) return;
+            minX = Math.min(minX, n.x);
+            minY = Math.min(minY, n.y);
+            maxX = Math.max(maxX, n.x + el.offsetWidth);
+            maxY = Math.max(maxY, n.y + el.offsetHeight);
+        });
+
+        const padding = 40;
+        const w = maxX - minX + padding * 2;
+        const h = maxY - minY + padding * 2;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w * 2;
+        canvas.height = h * 2;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(2, 2);
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-canvas') || '#f8fafc';
+        ctx.fillRect(0, 0, w, h);
+
+        connections.forEach(conn => {
+            const from = getPortPosition(conn.from.nodeId, conn.from.port);
+            const to = getPortPosition(conn.to.nodeId, conn.to.port);
+            ctx.beginPath();
+            ctx.moveTo(from.x - minX + padding, from.y - minY + padding);
+            const mx = (from.x + to.x) / 2 - minX + padding;
+            ctx.bezierCurveTo(mx, from.y - minY + padding, mx, to.y - minY + padding, to.x - minX + padding, to.y - minY + padding);
+            ctx.strokeStyle = '#6366f1';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        });
+
+        canvasNodes.forEach(n => {
+            const x = n.x - minX + padding;
+            const y = n.y - minY + padding;
+            const nw = 170, nh = 70;
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.roundRect(x, y, nw, nh, 8);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = n.color;
+            ctx.beginPath();
+            ctx.roundRect(x + 8, y + 8, 32, 20, 4);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 9px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(n.resource.label.substring(0, 3).toUpperCase(), x + 24, y + 22);
+            ctx.fillStyle = '#1e293b';
+            ctx.font = '500 11px Inter, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(n.name, x + 8, y + 48);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.fillText(n.detail || '', x + 8, y + 62);
+        });
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('CloudForge', w - 10, h - 10);
+
+        canvasArea.style.transform = origTransform;
+
+        canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'architecture.png';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
         showToast('Diagram exported as PNG', 'success');
     });
 
     document.getElementById('export-docs')?.addEventListener('click', () => {
         document.getElementById('export-modal').classList.remove('active');
-        showToast('Documentation generated', 'success');
+        if (canvasNodes.length === 0) { showToast('Add resources first', 'warning'); return; }
+
+        const archName = document.getElementById('arch-name-crumb')?.textContent || 'Architecture';
+        let doc = `# ${archName} - Infrastructure Documentation\n\n`;
+        doc += `Generated by CloudForge on ${new Date().toLocaleDateString()}\n\n`;
+        doc += `## Overview\n\n`;
+        doc += `| Metric | Value |\n|--------|-------|\n`;
+        doc += `| Total Resources | ${canvasNodes.length} |\n`;
+        doc += `| Connections | ${connections.length} |\n`;
+        let totalCost = 0;
+        canvasNodes.forEach(n => { totalCost += (costMap[n.resource.id] || 0); });
+        doc += `| Estimated Monthly Cost | $${totalCost.toFixed(2)} |\n`;
+        doc += `| Provider | ${activeProvider.toUpperCase()} |\n\n`;
+
+        doc += `## Resources\n\n`;
+        const grouped = {};
+        canvasNodes.forEach(n => {
+            const cat = n.resource.catName || 'Other';
+            if (!grouped[cat]) grouped[cat] = [];
+            grouped[cat].push(n);
+        });
+        Object.entries(grouped).forEach(([cat, nodes]) => {
+            doc += `### ${cat}\n\n`;
+            doc += `| Resource | Type | Name | Detail | Est. Cost |\n|----------|------|------|--------|-----------|\n`;
+            nodes.forEach(n => {
+                const cost = costMap[n.resource.id] || 0;
+                doc += `| ${n.resource.label} | \`${n.resource.tf}\` | ${n.name} | ${n.detail || '-'} | $${cost.toFixed(2)}/mo |\n`;
+            });
+            doc += `\n`;
+        });
+
+        if (connections.length > 0) {
+            doc += `## Connections\n\n`;
+            connections.forEach(c => {
+                const fromNode = canvasNodes.find(n => n.id === c.from.nodeId);
+                const toNode = canvasNodes.find(n => n.id === c.to.nodeId);
+                if (fromNode && toNode) {
+                    doc += `- **${fromNode.resource.label}** (${fromNode.name}) -> **${toNode.resource.label}** (${toNode.name})\n`;
+                }
+            });
+            doc += `\n`;
+        }
+
+        doc += `## Deployment Notes\n\n`;
+        doc += `1. Review \`variables.tf\` and set required values\n`;
+        doc += `2. Run \`terraform init\` to initialize providers\n`;
+        doc += `3. Run \`terraform plan\` to preview changes\n`;
+        doc += `4. Run \`terraform apply\` to deploy\n`;
+
+        const blob = new Blob([doc], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${archName.replace(/\s+/g, '-').toLowerCase()}-docs.md`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Documentation exported', 'success');
     });
+
+    // ===== COLLABORATION =====
+    document.getElementById('collab-btn')?.addEventListener('click', () => {
+        showToast('Collaboration: Share your architecture link to collaborate with teammates', 'info');
+        document.getElementById('share-btn')?.click();
+    });
+
+    // ===== SHARE =====
+    document.getElementById('share-btn')?.addEventListener('click', () => {
+        if (canvasNodes.length === 0) { showToast('Add resources to share', 'warning'); return; }
+        const shareData = {
+            name: document.getElementById('arch-name-crumb')?.textContent || 'Architecture',
+            provider: activeProvider,
+            resources: canvasNodes.map(n => ({ id: n.resource.id, label: n.resource.label, type: n.resource.tf, name: n.name, detail: n.detail, x: n.x, y: n.y, color: n.color, catName: n.resource.catName })),
+            connections: connections.map(c => ({ from: c.from, to: c.to })),
+        };
+        const encoded = btoa(encodeURIComponent(JSON.stringify(shareData)));
+        const shareUrl = `${window.location.origin}${window.location.pathname}?arch=${encoded}`;
+        navigator.clipboard?.writeText(shareUrl).then(() => {
+            showToast('Share link copied to clipboard!', 'success');
+        }).catch(() => {
+            const input = document.createElement('input');
+            input.value = shareUrl;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            input.remove();
+            showToast('Share link copied to clipboard!', 'success');
+        });
+    });
+
+    // Load from share URL if present
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const archParam = urlParams.get('arch');
+        if (archParam) {
+            const shareData = JSON.parse(decodeURIComponent(atob(archParam)));
+            if (shareData.resources && shareData.resources.length > 0) {
+                setTimeout(() => {
+                    canvasNodes = [];
+                    connections = [];
+                    canvasArea.querySelectorAll('.canvas-node').forEach(n => n.remove());
+                    if (shareData.name) document.getElementById('arch-name-crumb').textContent = shareData.name;
+                    openDesigner();
+                    let delay = 0;
+                    shareData.resources.forEach(r => {
+                        setTimeout(() => addNodeToCanvas({ id: r.id, label: r.label, type: r.type, tf: r.type, detail: r.detail, catName: r.catName }, r.x, r.y), delay);
+                        delay += 150;
+                    });
+                    setTimeout(() => {
+                        if (shareData.connections) {
+                            const ids = canvasNodes.map(n => n.id);
+                            shareData.connections.forEach((c, i) => {
+                                const fromIdx = shareData.resources.findIndex((_, idx) => idx === parseInt(c.from.nodeId?.replace('node-', '') || i));
+                                if (ids[fromIdx] && ids[fromIdx + 1]) {
+                                    connections.push({ id: `conn-${connectionIdCounter++}`, from: { nodeId: ids[fromIdx], port: c.from.port || 'right' }, to: { nodeId: ids[fromIdx + 1], port: c.to.port || 'left' } });
+                                }
+                            });
+                        }
+                        drawConnections();
+                        updateStatusBar();
+                        saveToLocalStorage();
+                        showToast(`Loaded shared architecture: ${shareData.name}`, 'success');
+                    }, delay + 300);
+                    window.history.replaceState({}, '', window.location.pathname);
+                }, 500);
+            }
+        }
+    } catch (e) { /* invalid share param */ }
 
     // ===== PROJECT DETAIL =====
     const projectData = {
@@ -1998,6 +2470,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 [...selectedNodes].forEach(id => deleteNode(id));
                 selectedNodes.clear();
             }
+        }
+
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            e.preventDefault();
+            saveToLocalStorage();
+            showToast('Architecture saved', 'success');
+        }
+
+        if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+            e.preventDefault();
+            document.getElementById('export-modal')?.classList.add('active');
         }
     });
 
@@ -2452,10 +2935,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === '?' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
             document.getElementById('shortcuts-modal').classList.add('active');
         }
-        // Ctrl+D for dark mode toggle (when not focused on input)
+        // Ctrl+D to duplicate selected node, or toggle dark mode if none selected
         if ((e.ctrlKey || e.metaKey) && e.key === 'd' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
             e.preventDefault();
-            toggleTheme();
+            if (selectedNodes.size === 1 && document.getElementById('page-designer')?.classList.contains('active')) {
+                duplicateNode([...selectedNodes][0]);
+            } else {
+                toggleTheme();
+            }
         }
     });
 
