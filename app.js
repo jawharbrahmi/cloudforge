@@ -118,8 +118,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 { id: 'lex', label: 'Lex', type: 'aws_lexv2models_bot', detail: 'chatbot', tf: 'aws_lexv2models_bot' },
                 { id: 'sagemaker', label: 'SageMaker', type: 'aws_sagemaker_domain', detail: 'ML platform', tf: 'aws_sagemaker_domain' },
                 { id: 'bedrock', label: 'Bedrock', type: 'aws_bedrock_model_invocation_logging_configuration', detail: 'foundation AI', tf: 'aws_bedrock_model_invocation_logging_configuration' },
+                { id: 'bedrock_agents', label: 'Bedrock Agents', type: 'aws_bedrockagent_agent', detail: 'AI agents', tf: 'aws_bedrockagent_agent' },
                 { id: 'comprehend', label: 'Comprehend', type: 'aws_comprehend_entity_recognizer', detail: 'NLP', tf: 'aws_comprehend_entity_recognizer' },
                 { id: 'rekognition', label: 'Rekognition', type: 'aws_rekognition_project', detail: 'image/video AI', tf: 'aws_rekognition_project' },
+            ]
+        },
+        {
+            name: 'Analytics', icon: '&', color: '#0ea5e9',
+            items: [
+                { id: 'athena', label: 'Athena', type: 'aws_athena_workgroup', detail: 'SQL queries', tf: 'aws_athena_workgroup' },
+                { id: 'cloudsearch', label: 'CloudSearch', type: 'aws_cloudsearch_domain', detail: 'search svc', tf: 'aws_cloudsearch_domain' },
+                { id: 'dataexchange', label: 'Data Exchange', type: 'aws_dataexchange_data_set', detail: 'data sharing', tf: 'aws_dataexchange_data_set' },
+                { id: 'emr', label: 'EMR', type: 'aws_emr_cluster', detail: 'big data', tf: 'aws_emr_cluster' },
+                { id: 'glue', label: 'Glue', type: 'aws_glue_catalog_database', detail: 'ETL', tf: 'aws_glue_catalog_database' },
+                { id: 'kinesis', label: 'Kinesis', type: 'aws_kinesis_stream', detail: 'streaming', tf: 'aws_kinesis_stream' },
+                { id: 'lakeformation', label: 'Lake Formation', type: 'aws_lakeformation_resource', detail: 'data lake', tf: 'aws_lakeformation_resource' },
+                { id: 'quicksight', label: 'QuickSight', type: 'aws_quicksight_data_source', detail: 'BI dashboards', tf: 'aws_quicksight_data_source' },
+                { id: 'redshift', label: 'Redshift', type: 'aws_redshift_cluster', detail: 'data warehouse', tf: 'aws_redshift_cluster' },
+                { id: 'msk', label: 'MSK (Kafka)', type: 'aws_msk_cluster', detail: 'streaming', tf: 'aws_msk_cluster' },
+                { id: 'opensearch', label: 'OpenSearch', type: 'aws_opensearch_domain', detail: 'search & analytics', tf: 'aws_opensearch_domain' },
+            ]
+        },
+        {
+            name: 'Application', icon: '%', color: '#14b8a6',
+            items: [
+                { id: 'amplify', label: 'Amplify', type: 'aws_amplify_app', detail: 'fullstack app', tf: 'aws_amplify_app' },
+                { id: 'appconfig', label: 'AppConfig', type: 'aws_appconfig_application', detail: 'feature flags', tf: 'aws_appconfig_application' },
+                { id: 'appflow', label: 'AppFlow', type: 'aws_appflow_flow', detail: 'SaaS integration', tf: 'aws_appflow_flow' },
+                { id: 'appsync', label: 'AppSync', type: 'aws_appsync_graphql_api', detail: 'GraphQL API', tf: 'aws_appsync_graphql_api' },
+                { id: 'connect', label: 'Connect', type: 'aws_connect_instance', detail: 'contact center', tf: 'aws_connect_instance' },
+                { id: 'devicefarm', label: 'Device Farm', type: 'aws_devicefarm_project', detail: 'app testing', tf: 'aws_devicefarm_project' },
+                { id: 'medialive', label: 'MediaLive', type: 'aws_medialive_channel', detail: 'live video', tf: 'aws_medialive_channel' },
+                { id: 'gamelift', label: 'GameLift', type: 'aws_gamelift_fleet', detail: 'game server', tf: 'aws_gamelift_fleet' },
+                { id: 'ivs', label: 'IVS', type: 'aws_ivs_channel', detail: 'interactive video', tf: 'aws_ivs_channel' },
+                { id: 'mediaconvert', label: 'MediaConvert', type: 'aws_media_convert_queue', detail: 'video encoding', tf: 'aws_media_convert_queue' },
+                { id: 'appstream', label: 'AppStream', type: 'aws_appstream_fleet', detail: 'app streaming', tf: 'aws_appstream_fleet' },
+                { id: 'mwaa', label: 'MWAA', type: 'aws_mwaa_environment', detail: 'Airflow', tf: 'aws_mwaa_environment' },
+            ]
+        },
+        {
+            name: 'IoT', icon: '^', color: '#84cc16',
+            items: [
+                { id: 'iot_thing', label: 'IoT Thing', type: 'aws_iot_thing', detail: 'device', tf: 'aws_iot_thing' },
+                { id: 'iot_policy', label: 'IoT Policy', type: 'aws_iot_policy', detail: 'permissions', tf: 'aws_iot_policy' },
+                { id: 'iot_rule', label: 'IoT Rule', type: 'aws_iot_topic_rule', detail: 'action trigger', tf: 'aws_iot_topic_rule' },
+                { id: 'iot_cert', label: 'IoT Certificate', type: 'aws_iot_certificate', detail: 'X.509 cert', tf: 'aws_iot_certificate' },
+                { id: 'greengrass', label: 'Greengrass', type: 'aws_greengrassv2_component_version', detail: 'edge compute', tf: 'aws_greengrassv2_component_version' },
+                { id: 'iot_analytics', label: 'IoT Analytics', type: 'aws_iotanalytics_channel', detail: 'data pipeline', tf: 'aws_iotanalytics_channel' },
+                { id: 'iot_events', label: 'IoT Events', type: 'aws_iot_event_configurations', detail: 'event detection', tf: 'aws_iot_event_configurations' },
+                { id: 'iot_sitewise', label: 'IoT SiteWise', type: 'aws_iotsitewise_asset_model', detail: 'industrial data', tf: 'aws_iotsitewise_asset_model' },
             ]
         },
     ];
@@ -133,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { icon: 'MON', name: 'Monitoring Stack', desc: 'CloudWatch dashboards, alarms, and SNS notifications.', tags: ['CloudWatch', 'SNS', 'Logs'], filter: 'compute' },
     ];
 
-    const categoryColors = { Compute: '#ff6b00', Network: '#3b82f6', Database: '#8b5cf6', Storage: '#10b981', 'Security & Identity': '#ef4444', Security: '#ef4444', Tools: '#f59e0b', AI: '#a855f7' };
+    const categoryColors = { Compute: '#ff6b00', Network: '#3b82f6', Database: '#8b5cf6', Storage: '#10b981', 'Security & Identity': '#ef4444', Security: '#ef4444', Tools: '#f59e0b', AI: '#a855f7', Analytics: '#0ea5e9', Application: '#14b8a6', IoT: '#84cc16' };
 
     const costMap = {
         // Compute
@@ -163,8 +210,19 @@ document.addEventListener('DOMContentLoaded', () => {
         grafana: 9.00, prometheus: 12.00, xray: 5.00,
         mq: 80.00, organizations: 0, pinpoint: 0,
         // AI
-        sagemaker: 100.00, bedrock: 0, kendra: 810.00, lex: 0.75,
+        sagemaker: 100.00, bedrock: 0, bedrock_agents: 0, kendra: 810.00, lex: 0.75,
         comprehend: 0, rekognition: 0,
+        // Analytics
+        athena: 5.00, cloudsearch: 60.00, dataexchange: 0, emr: 100.00, glue: 0.44,
+        kinesis: 15.00, lakeformation: 0, quicksight: 18.00, redshift: 180.00,
+        msk: 150.00, opensearch: 160.00,
+        // Application
+        amplify: 12.00, appconfig: 0, appflow: 1.00, appsync: 3.50,
+        connect: 0, devicefarm: 0.17, medialive: 450.00, gamelift: 50.00,
+        ivs: 2.00, mediaconvert: 0, appstream: 22.00, mwaa: 350.00,
+        // IoT
+        iot_thing: 0, iot_policy: 0, iot_rule: 0, iot_cert: 0,
+        greengrass: 0.16, iot_analytics: 0, iot_events: 0, iot_sitewise: 0,
         // Multi-cloud
         azure_vm: 70.00, azure_func: 5.00, azure_aks: 72.00, azure_container: 30.00,
         azure_vnet: 0, azure_subnet: 0, azure_lb: 18.00, azure_appgw: 22.00, azure_nsg: 0,
@@ -2973,6 +3031,423 @@ document.addEventListener('DOMContentLoaded', () => {
         saveToLocalStorage();
         showToast('Nodes auto-aligned', 'success');
     });
+
+    // ===== VERSION HISTORY =====
+    let versionHistory = JSON.parse(localStorage.getItem('cf-versions') || '[]');
+
+    document.getElementById('version-history-btn')?.addEventListener('click', () => {
+        renderVersionHistory();
+        document.getElementById('version-history-modal').classList.add('active');
+    });
+
+    document.getElementById('version-history-close')?.addEventListener('click', () => {
+        document.getElementById('version-history-modal').classList.remove('active');
+    });
+
+    document.getElementById('version-save-btn')?.addEventListener('click', () => {
+        const archName = document.getElementById('arch-name-crumb')?.textContent || 'Architecture';
+        const version = {
+            id: Date.now(),
+            name: archName,
+            timestamp: new Date().toISOString(),
+            nodeCount: canvasNodes.length,
+            connCount: connections.length,
+            nodes: JSON.parse(JSON.stringify(canvasNodes)),
+            connections: JSON.parse(JSON.stringify(connections)),
+        };
+        versionHistory.unshift(version);
+        if (versionHistory.length > 20) versionHistory.pop();
+        localStorage.setItem('cf-versions', JSON.stringify(versionHistory));
+        renderVersionHistory();
+        showToast(`Version saved: ${archName} (${canvasNodes.length} resources)`, 'success');
+    });
+
+    function renderVersionHistory() {
+        const list = document.getElementById('version-list');
+        if (!list) return;
+        if (versionHistory.length === 0) {
+            list.innerHTML = '<div class="notif-empty" style="padding:30px;text-align:center;color:var(--text-muted);"><p>No versions saved yet.</p><p style="font-size:0.8rem;">Click "Save Version" to create a snapshot of your current architecture.</p></div>';
+            return;
+        }
+        list.innerHTML = versionHistory.map((v, i) => {
+            const date = new Date(v.timestamp);
+            const timeStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return `<div class="version-item" data-idx="${i}">
+                <div class="version-info">
+                    <strong>${v.name}</strong>
+                    <span class="version-meta">${v.nodeCount} resources, ${v.connCount} connections</span>
+                    <span class="version-time">${timeStr}</span>
+                </div>
+                <div class="version-actions-row">
+                    <button class="btn-version-restore" data-idx="${i}">Restore</button>
+                    <button class="btn-version-delete" data-idx="${i}">&times;</button>
+                </div>
+            </div>`;
+        }).join('');
+
+        list.querySelectorAll('.btn-version-restore').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const v = versionHistory[parseInt(btn.dataset.idx)];
+                if (!v) return;
+                saveState();
+                canvasNodes = JSON.parse(JSON.stringify(v.nodes));
+                connections = JSON.parse(JSON.stringify(v.connections));
+                canvasArea.querySelectorAll('.canvas-node').forEach(n => n.remove());
+                canvasNodes.forEach(n => renderCanvasNode(n));
+                drawConnections();
+                updateCode();
+                updateStatusBar();
+                if (canvasNodes.length === 0) showCanvasEmpty(); else hideCanvasEmpty();
+                updateMinimap();
+                saveToLocalStorage();
+                document.getElementById('version-history-modal').classList.remove('active');
+                showToast(`Restored version: ${v.name}`, 'success');
+            });
+        });
+
+        list.querySelectorAll('.btn-version-delete').forEach(btn => {
+            btn.addEventListener('click', () => {
+                versionHistory.splice(parseInt(btn.dataset.idx), 1);
+                localStorage.setItem('cf-versions', JSON.stringify(versionHistory));
+                renderVersionHistory();
+                showToast('Version deleted', 'info');
+            });
+        });
+    }
+
+    // ===== PULL REQUEST =====
+    document.getElementById('pr-btn')?.addEventListener('click', () => {
+        const summary = document.getElementById('pr-changes-summary');
+        if (summary) {
+            let totalCost = 0;
+            canvasNodes.forEach(n => { totalCost += (costMap[n.resource.id] || 0); });
+            summary.innerHTML = `<div class="pr-summary-header">Changes Summary</div>
+                <div class="pr-summary-stats">
+                    <span class="pr-stat add">+ ${canvasNodes.length} resources</span>
+                    <span class="pr-stat conn">${connections.length} connections</span>
+                    <span class="pr-stat cost">$${totalCost.toFixed(2)}/mo</span>
+                </div>
+                <div class="pr-files">
+                    <div class="pr-file"><span class="pr-file-icon add">M</span> main.tf</div>
+                    <div class="pr-file"><span class="pr-file-icon add">M</span> variables.tf</div>
+                    <div class="pr-file"><span class="pr-file-icon add">M</span> outputs.tf</div>
+                </div>`;
+        }
+        document.getElementById('pr-title').value = `Update ${document.getElementById('arch-name-crumb')?.textContent || 'architecture'}: ${canvasNodes.length} resources`;
+        document.getElementById('pr-modal').classList.add('active');
+    });
+
+    document.getElementById('pr-modal-close')?.addEventListener('click', () => document.getElementById('pr-modal').classList.remove('active'));
+    document.getElementById('pr-cancel')?.addEventListener('click', () => document.getElementById('pr-modal').classList.remove('active'));
+
+    document.getElementById('pr-create-btn')?.addEventListener('click', () => {
+        const title = document.getElementById('pr-title')?.value.trim();
+        if (!title) { document.getElementById('pr-title').style.borderColor = '#ef4444'; return; }
+        document.getElementById('pr-modal').classList.remove('active');
+        const prNum = Math.floor(Math.random() * 900) + 100;
+        notifications.unshift({ type: 'success', msg: `<strong>PR #${prNum}</strong> created: ${title}`, time: 'Just now' });
+        renderNotifications();
+        showToast(`Pull Request #${prNum} created successfully`, 'success');
+    });
+
+    // ===== ARCHITECTURE SETTINGS =====
+    document.getElementById('arch-settings-btn')?.addEventListener('click', () => {
+        document.getElementById('arch-settings-name').value = document.getElementById('arch-name-crumb')?.textContent || '';
+        document.getElementById('arch-settings-modal').classList.add('active');
+    });
+
+    document.getElementById('arch-settings-close')?.addEventListener('click', () => document.getElementById('arch-settings-modal').classList.remove('active'));
+    document.getElementById('arch-settings-cancel')?.addEventListener('click', () => document.getElementById('arch-settings-modal').classList.remove('active'));
+
+    document.getElementById('arch-backend-type')?.addEventListener('change', (e) => {
+        const isS3 = e.target.value === 's3';
+        ['backend-s3-bucket', 'backend-s3-key', 'backend-s3-region', 'backend-s3-dynamo'].forEach(id => {
+            document.getElementById(id).style.display = isS3 ? '' : 'none';
+        });
+    });
+
+    document.getElementById('arch-settings-save')?.addEventListener('click', () => {
+        const newName = document.getElementById('arch-settings-name')?.value.trim();
+        if (newName) document.getElementById('arch-name-crumb').textContent = newName;
+        document.getElementById('arch-settings-modal').classList.remove('active');
+        saveToLocalStorage();
+        showToast('Architecture settings saved', 'success');
+    });
+
+    // ===== VIEW MODE SELECTOR =====
+    document.querySelectorAll('.view-mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.view-mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const mode = btn.dataset.view;
+            const canvas = document.getElementById('canvas-container');
+            const code = document.getElementById('code-panel');
+            const resPanel = document.getElementById('resource-panel');
+
+            if (mode === 'design') {
+                canvas.style.display = '';
+                canvas.style.flex = '1';
+                code.classList.add('hidden');
+                if (resPanel) resPanel.style.display = '';
+            } else if (mode === 'code') {
+                canvas.style.display = 'none';
+                code.classList.remove('hidden');
+                code.style.flex = '1';
+                code.style.maxWidth = 'none';
+                if (resPanel) resPanel.style.display = 'none';
+            } else {
+                canvas.style.display = '';
+                canvas.style.flex = '1';
+                code.classList.remove('hidden');
+                code.style.flex = '';
+                code.style.maxWidth = '';
+                if (resPanel) resPanel.style.display = '';
+            }
+        });
+    });
+
+    // ===== README EDITOR =====
+    let readmeContent = localStorage.getItem('cf-readme') || '';
+
+    document.getElementById('readme-btn')?.addEventListener('click', () => {
+        document.getElementById('readme-editor').value = readmeContent;
+        document.getElementById('readme-preview').style.display = 'none';
+        document.getElementById('readme-editor').style.display = '';
+        document.getElementById('readme-modal').classList.add('active');
+    });
+
+    document.getElementById('readme-close')?.addEventListener('click', () => document.getElementById('readme-modal').classList.remove('active'));
+
+    document.getElementById('readme-preview-toggle')?.addEventListener('click', function() {
+        const editor = document.getElementById('readme-editor');
+        const preview = document.getElementById('readme-preview');
+        const isPreview = preview.style.display !== 'none';
+        if (isPreview) {
+            preview.style.display = 'none';
+            editor.style.display = '';
+            this.textContent = 'Preview';
+        } else {
+            const md = editor.value;
+            let html = md
+                .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+                .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/_(.+?)_/g, '<em>$1</em>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/^- (.+)$/gm, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+                .replace(/\n\n/g, '<br><br>')
+                .replace(/\n/g, '<br>');
+            preview.innerHTML = html;
+            preview.style.display = '';
+            editor.style.display = 'none';
+            this.textContent = 'Edit';
+        }
+    });
+
+    document.querySelectorAll('.readme-tool[data-md]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const editor = document.getElementById('readme-editor');
+            const md = btn.dataset.md;
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const selected = editor.value.substring(start, end);
+            if (btn.dataset.wrap) {
+                const suffix = btn.dataset.suffix || md;
+                editor.value = editor.value.substring(0, start) + md + selected + suffix + editor.value.substring(end);
+            } else {
+                editor.value = editor.value.substring(0, start) + md + selected + editor.value.substring(end);
+            }
+            editor.focus();
+        });
+    });
+
+    document.getElementById('readme-save')?.addEventListener('click', () => {
+        readmeContent = document.getElementById('readme-editor').value;
+        localStorage.setItem('cf-readme', readmeContent);
+        document.getElementById('readme-modal').classList.remove('active');
+        showToast('README saved', 'success');
+    });
+
+    // ===== HELP MENU =====
+    document.getElementById('help-btn')?.addEventListener('click', () => {
+        document.getElementById('help-panel').classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#help-panel') && !e.target.closest('#help-btn')) {
+            document.getElementById('help-panel')?.classList.remove('active');
+        }
+    });
+
+    document.getElementById('help-shortcuts')?.addEventListener('click', () => {
+        document.getElementById('help-panel').classList.remove('active');
+        document.getElementById('shortcuts-modal').classList.add('active');
+    });
+
+    document.getElementById('help-getting-started')?.addEventListener('click', () => {
+        document.getElementById('help-panel').classList.remove('active');
+        showToast('Tip: Drag resources from the left panel onto the canvas to start designing your cloud architecture', 'info');
+    });
+
+    // ===== CUSTOM RESOURCE CREATOR =====
+    let customResources = JSON.parse(localStorage.getItem('cf-custom-resources') || '[]');
+    let selectedCustomColor = '#6366f1';
+
+    function addCustomResourceBtn() {
+        const existing = document.getElementById('custom-res-add-btn');
+        if (existing) return;
+        const container = document.getElementById('resource-categories');
+        if (!container) return;
+        const btn = document.createElement('div');
+        btn.id = 'custom-res-add-btn';
+        btn.className = 'res-category';
+        btn.style.cursor = 'pointer';
+        btn.innerHTML = `<div class="res-cat-header" style="color:var(--primary);font-weight:600;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Custom Resource
+        </div>`;
+        btn.addEventListener('click', () => {
+            document.getElementById('custom-resource-modal').classList.add('active');
+        });
+        container.appendChild(btn);
+
+        if (customResources.length > 0) {
+            renderCustomResourceCategory();
+        }
+    }
+
+    function renderCustomResourceCategory() {
+        let customCatEl = document.getElementById('custom-res-category');
+        if (customCatEl) customCatEl.remove();
+        if (customResources.length === 0) return;
+
+        const container = document.getElementById('resource-categories');
+        const catDiv = document.createElement('div');
+        catDiv.className = 'res-category';
+        catDiv.id = 'custom-res-category';
+        catDiv.innerHTML = `
+            <div class="res-cat-header">
+                <svg width="12" height="12" viewBox="0 0 12 12"><path d="M3 2L9 6L3 10" fill="currentColor"/></svg>
+                Custom Resources
+                <span style="color:var(--text-muted);font-size:0.7rem;margin-left:auto;">${customResources.length}</span>
+            </div>
+            <div class="res-cat-grid">
+                ${customResources.map(item => `
+                    <div class="resource-item" data-resource='${JSON.stringify(item).replace(/'/g, "&#39;")}' data-cat="Custom" draggable="true">
+                        <div class="res-item-icon" style="background: ${item.color || '#6366f1'}">${item.label.substring(0, 3).toUpperCase()}</div>
+                        <span>${item.label}</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        const addBtn = document.getElementById('custom-res-add-btn');
+        if (addBtn) container.insertBefore(catDiv, addBtn);
+        else container.appendChild(catDiv);
+
+        const header = catDiv.querySelector('.res-cat-header');
+        const grid = catDiv.querySelector('.res-cat-grid');
+        header.addEventListener('click', () => {
+            header.classList.toggle('collapsed');
+            grid.classList.toggle('collapsed');
+        });
+        setupDragAndDrop();
+    }
+
+    document.querySelectorAll('#custom-res-colors .color-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+            document.querySelectorAll('#custom-res-colors .color-dot').forEach(d => d.classList.remove('active'));
+            dot.classList.add('active');
+            selectedCustomColor = dot.dataset.color;
+        });
+    });
+
+    document.getElementById('custom-resource-close')?.addEventListener('click', () => document.getElementById('custom-resource-modal').classList.remove('active'));
+    document.getElementById('custom-res-cancel')?.addEventListener('click', () => document.getElementById('custom-resource-modal').classList.remove('active'));
+
+    document.getElementById('custom-res-create')?.addEventListener('click', () => {
+        const label = document.getElementById('custom-res-label')?.value.trim();
+        const type = document.getElementById('custom-res-type')?.value.trim();
+        const detail = document.getElementById('custom-res-detail')?.value.trim() || 'custom';
+        if (!label || !type) {
+            if (!label) document.getElementById('custom-res-label').style.borderColor = '#ef4444';
+            if (!type) document.getElementById('custom-res-type').style.borderColor = '#ef4444';
+            return;
+        }
+        const res = { id: 'custom_' + label.toLowerCase().replace(/\s+/g, '_'), label, type, detail, tf: type, color: selectedCustomColor };
+        customResources.push(res);
+        localStorage.setItem('cf-custom-resources', JSON.stringify(customResources));
+        renderCustomResourceCategory();
+        document.getElementById('custom-resource-modal').classList.remove('active');
+        document.getElementById('custom-res-label').value = '';
+        document.getElementById('custom-res-type').value = '';
+        document.getElementById('custom-res-detail').value = '';
+        showToast(`Custom resource "${label}" created`, 'success');
+    });
+
+    setTimeout(addCustomResourceBtn, 300);
+
+    // ===== ENHANCED ISSUES VALIDATION =====
+    const origUpdateIssues = updateIssues;
+    updateIssues = function() {
+        const list = document.getElementById('issues-list');
+        if (!list) return;
+        const issues = [];
+
+        const hasEC2 = canvasNodes.some(n => n.resource.id === 'ec2');
+        const hasSG = canvasNodes.some(n => n.resource.id === 'sg');
+        const hasVPC = canvasNodes.some(n => n.resource.id === 'vpc');
+        const hasRDS = canvasNodes.some(n => n.resource.id === 'rds');
+        const hasS3 = canvasNodes.some(n => n.resource.id === 's3');
+        const hasALB = canvasNodes.some(n => n.resource.id === 'alb');
+        const hasLambda = canvasNodes.some(n => n.resource.id === 'lambda');
+        const hasNatGW = canvasNodes.some(n => n.resource.id === 'natgw');
+        const hasSubnet = canvasNodes.some(n => n.resource.id === 'subnet');
+        const hasKMS = canvasNodes.some(n => n.resource.id === 'kms');
+        const hasIAM = canvasNodes.some(n => n.resource.id === 'iam_role');
+        const hasCloudWatch = canvasNodes.some(n => n.resource.id === 'cloudwatch');
+        const hasCloudTrail = canvasNodes.some(n => n.resource.id === 'cloudtrail');
+        const hasWAF = canvasNodes.some(n => n.resource.id === 'waf');
+        const hasECS = canvasNodes.some(n => n.resource.id === 'ecs');
+        const hasDynamoDB = canvasNodes.some(n => n.resource.id === 'dynamodb');
+        const hasElastiCache = canvasNodes.some(n => n.resource.id === 'elasticache');
+        const hasCognito = canvasNodes.some(n => n.resource.id === 'cognito');
+        const hasAPIGW = canvasNodes.some(n => n.resource.id === 'apigateway');
+
+        if (hasEC2 && !hasSG) issues.push({ type: 'error', text: 'EC2 without Security Group', resource: 'Add a security group to control inbound/outbound traffic.' });
+        if (hasEC2 && !hasVPC) issues.push({ type: 'warn', text: 'EC2 without VPC', resource: 'Place EC2 in a VPC for network isolation.' });
+        if (hasRDS && !hasVPC) issues.push({ type: 'error', text: 'RDS without VPC', resource: 'Database must be in a VPC for network isolation.' });
+        if (hasRDS && !hasSG) issues.push({ type: 'warn', text: 'RDS without Security Group', resource: 'Restrict database access with a security group.' });
+        if (hasRDS && !hasKMS) issues.push({ type: 'warn', text: 'RDS without KMS encryption', resource: 'Consider adding KMS key for encryption at rest.' });
+        if (hasALB && !hasSG) issues.push({ type: 'warn', text: 'ALB without Security Group', resource: 'ALB should have a security group for traffic filtering.' });
+        if (hasALB && !hasWAF) issues.push({ type: 'info', text: 'ALB without WAF', resource: 'Consider adding WAF for web application protection.' });
+        if (hasS3 && !hasKMS) issues.push({ type: 'info', text: 'S3 without KMS', resource: 'Consider adding KMS key for server-side encryption.' });
+        if (hasLambda && !hasIAM) issues.push({ type: 'warn', text: 'Lambda without IAM Role', resource: 'Lambda functions require an execution role.' });
+        if (hasLambda && !hasCloudWatch) issues.push({ type: 'info', text: 'Lambda without CloudWatch', resource: 'Add CloudWatch for monitoring and log groups.' });
+        if (hasVPC && !hasSubnet) issues.push({ type: 'warn', text: 'VPC without Subnets', resource: 'VPC needs at least one subnet to host resources.' });
+        if (hasSubnet && hasRDS && !hasNatGW) issues.push({ type: 'info', text: 'Private subnet without NAT Gateway', resource: 'Add NAT GW for outbound internet from private subnets.' });
+        if (canvasNodes.length > 0 && !hasCloudTrail) issues.push({ type: 'info', text: 'No CloudTrail configured', resource: 'Enable CloudTrail for API audit logging.' });
+        if (canvasNodes.length > 0 && !hasCloudWatch) issues.push({ type: 'info', text: 'No monitoring configured', resource: 'Add CloudWatch for monitoring and alerting.' });
+        if (hasECS && !hasALB) issues.push({ type: 'warn', text: 'ECS without Load Balancer', resource: 'Add an ALB for traffic distribution to containers.' });
+        if (hasAPIGW && !hasCognito) issues.push({ type: 'info', text: 'API Gateway without auth', resource: 'Consider Cognito for API authentication.' });
+        if (hasDynamoDB && !hasKMS) issues.push({ type: 'info', text: 'DynamoDB without encryption key', resource: 'Consider KMS for customer-managed encryption.' });
+        if (hasElastiCache && !hasSG) issues.push({ type: 'warn', text: 'ElastiCache without Security Group', resource: 'Restrict cache access with a security group.' });
+
+        if (issues.length === 0) {
+            if (canvasNodes.length === 0) {
+                list.innerHTML = '<div class="issues-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="issues-icon-ok"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><h4>No issues found</h4><p>Add resources to start validation.</p></div>';
+            } else {
+                list.innerHTML = '<div class="issues-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="issues-icon-ok"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><h4>All checks passed</h4><p>' + canvasNodes.length + ' resources validated with 0 issues.</p></div>';
+            }
+        } else {
+            const errors = issues.filter(i => i.type === 'error').length;
+            const warns = issues.filter(i => i.type === 'warn').length;
+            const infos = issues.filter(i => i.type === 'info').length;
+            const header = `<div class="issues-summary"><span class="issue-count error">${errors} errors</span><span class="issue-count warn">${warns} warnings</span><span class="issue-count info">${infos} info</span></div>`;
+            list.innerHTML = header + issues.map(i => `<div class="issue-item"><div class="issue-icon ${i.type}">${i.type === 'error' ? '!' : i.type === 'warn' ? '!' : 'i'}</div><div class="issue-text"><strong>${i.text}</strong><div class="issue-resource">${i.resource}</div></div></div>`).join('');
+        }
+    };
 
     // ===== DIAGRAM UPLOAD =====
     const uploadZone = document.getElementById('upload-zone');

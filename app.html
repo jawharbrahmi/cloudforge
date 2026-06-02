@@ -145,13 +145,25 @@
                         <button class="toolbar-btn" title="Export" id="export-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
                         <button class="toolbar-btn" title="Share" id="share-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
                         <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" title="Version History" id="version-history-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
+                        <button class="toolbar-btn" title="Architecture Settings" id="arch-settings-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9"/></svg></button>
+                        <div class="toolbar-divider"></div>
                         <button class="toolbar-btn" title="AI Generate" id="ai-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></button>
                         <button class="toolbar-btn" title="Notifications" id="notif-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="notif-dot" id="notif-dot"></span></button>
                         <button class="toolbar-btn" title="Collaboration" id="collab-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></button>
                         <button class="toolbar-btn" title="Toggle Dark Mode" id="designer-theme-toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
                     </div>
                     <div class="designer-actions">
-                        <button class="btn-code-toggle active" id="toggle-code"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Code</button>
+                        <div class="view-mode-select" id="view-mode-group">
+                            <button class="view-mode-btn" data-view="design" title="Design only"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></button>
+                            <button class="view-mode-btn active" data-view="split" title="Split view"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg></button>
+                            <button class="view-mode-btn" data-view="code" title="Code only"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></button>
+                        </div>
+                        <div class="toolbar-divider"></div>
+                        <button class="btn-code-toggle" id="readme-btn" title="README"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></button>
+                        <button class="btn-code-toggle" id="help-btn" title="Help"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+                        <div class="toolbar-divider"></div>
+                        <button class="btn-code-toggle" id="pr-btn" title="Pull Request"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg> PR</button>
                         <button class="btn-plan-top" id="plan-btn">Plan</button>
                         <button class="btn-apply-top" id="apply-top-btn" disabled>Apply</button>
                     </div>
@@ -1011,12 +1023,189 @@ resource "aws_s3_bucket" "data" {
         </div>
     </div>
 
+    <!-- Version History Modal -->
+    <div class="modal-overlay" id="version-history-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Version History</h3>
+                <button class="modal-close" id="version-history-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="version-list" id="version-list"></div>
+                <div class="version-actions">
+                    <button class="btn-primary-sm" id="version-save-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save Version</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pull Request Modal -->
+    <div class="modal-overlay" id="pr-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg> Create Pull Request</h3>
+                <button class="modal-close" id="pr-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Title <span class="required">*</span></label>
+                    <input type="text" id="pr-title" placeholder="e.g., Add VPC and security groups">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="pr-description" placeholder="Describe the infrastructure changes..." rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Target branch</label>
+                    <select id="pr-branch"><option>main</option><option>staging</option><option>production</option></select>
+                </div>
+                <div class="form-group">
+                    <label>Reviewers</label>
+                    <div class="pr-reviewers">
+                        <span class="pr-reviewer-chip"><span class="reviewer-avatar">JB</span> jawhar brahmi</span>
+                    </div>
+                </div>
+                <div class="pr-changes-summary" id="pr-changes-summary"></div>
+                <div class="form-actions">
+                    <button class="btn-secondary" id="pr-cancel">Cancel</button>
+                    <button class="btn-primary-sm" id="pr-create-btn">Create Pull Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture Settings Modal -->
+    <div class="modal-overlay" id="arch-settings-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> Architecture Settings</h3>
+                <button class="modal-close" id="arch-settings-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-sections">
+                    <div class="settings-card">
+                        <h3>General</h3>
+                        <div class="setting-row"><label>Architecture Name</label><input type="text" id="arch-settings-name" value="New Architecture"></div>
+                        <div class="setting-row"><label>Description</label><textarea id="arch-settings-desc" placeholder="Describe this architecture..." rows="2"></textarea></div>
+                        <div class="setting-row"><label>Environment</label><select id="arch-settings-env"><option>Development</option><option>Staging</option><option>Production</option></select></div>
+                    </div>
+                    <div class="settings-card">
+                        <h3>Terraform Backend</h3>
+                        <div class="setting-row"><label>Backend Type</label><select id="arch-backend-type"><option>local</option><option>s3</option><option>azurerm</option><option>gcs</option><option>consul</option></select></div>
+                        <div class="setting-row" id="backend-s3-bucket" style="display:none;"><label>S3 Bucket</label><input type="text" placeholder="my-terraform-state"></div>
+                        <div class="setting-row" id="backend-s3-key" style="display:none;"><label>State Key</label><input type="text" placeholder="prod/terraform.tfstate"></div>
+                        <div class="setting-row" id="backend-s3-region" style="display:none;"><label>Region</label><input type="text" placeholder="us-east-1"></div>
+                        <div class="setting-row" id="backend-s3-dynamo" style="display:none;"><label>DynamoDB Table</label><input type="text" placeholder="terraform-locks"></div>
+                    </div>
+                    <div class="settings-card">
+                        <h3>Provider Configuration</h3>
+                        <div class="setting-row"><label>Default Region</label><input type="text" id="arch-default-region" value="us-east-1"></div>
+                        <div class="setting-row"><label>Terraform Version</label><select><option>~> 1.8.0</option><option>~> 1.7.0</option><option>~> 1.6.0</option></select></div>
+                    </div>
+                </div>
+                <div class="form-actions" style="margin-top:16px;">
+                    <button class="btn-secondary" id="arch-settings-cancel">Cancel</button>
+                    <button class="btn-primary-sm" id="arch-settings-save">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- README Editor Modal -->
+    <div class="modal-overlay" id="readme-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> README</h3>
+                <button class="modal-close" id="readme-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="readme-toolbar">
+                    <button class="readme-tool" data-md="# " title="Heading">H</button>
+                    <button class="readme-tool" data-md="**" data-wrap="true" title="Bold">B</button>
+                    <button class="readme-tool" data-md="_" data-wrap="true" title="Italic"><em>I</em></button>
+                    <button class="readme-tool" data-md="```\n" data-wrap="true" data-suffix="\n```" title="Code">{ }</button>
+                    <button class="readme-tool" data-md="- " title="List">&bull;</button>
+                    <button class="readme-tool" data-md="| " title="Table">T</button>
+                    <span class="readme-tool-sep"></span>
+                    <button class="readme-tool" id="readme-preview-toggle" title="Preview">Preview</button>
+                </div>
+                <textarea id="readme-editor" class="readme-textarea" placeholder="# Architecture Name
+
+Describe your infrastructure here...
+
+## Resources
+- VPC with public/private subnets
+- Application Load Balancer
+- EC2 instances with auto-scaling
+
+## Notes
+Add deployment notes, runbooks, or architecture decisions." rows="16"></textarea>
+                <div id="readme-preview" class="readme-preview" style="display:none;"></div>
+                <div class="form-actions" style="margin-top:12px;">
+                    <button class="btn-primary-sm" id="readme-save">Save README</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Resource Modal -->
+    <div class="modal-overlay" id="custom-resource-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Create Custom Resource</h3>
+                <button class="modal-close" id="custom-resource-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Resource Label <span class="required">*</span></label>
+                    <input type="text" id="custom-res-label" placeholder="e.g., My Service">
+                </div>
+                <div class="form-group">
+                    <label>Terraform Type <span class="required">*</span></label>
+                    <input type="text" id="custom-res-type" placeholder="e.g., aws_my_resource">
+                </div>
+                <div class="form-group">
+                    <label>Detail</label>
+                    <input type="text" id="custom-res-detail" placeholder="e.g., custom config">
+                </div>
+                <div class="form-group">
+                    <label>Color</label>
+                    <div class="custom-res-colors" id="custom-res-colors">
+                        <span class="color-dot active" data-color="#6366f1" style="background:#6366f1;"></span>
+                        <span class="color-dot" data-color="#ff6b00" style="background:#ff6b00;"></span>
+                        <span class="color-dot" data-color="#3b82f6" style="background:#3b82f6;"></span>
+                        <span class="color-dot" data-color="#10b981" style="background:#10b981;"></span>
+                        <span class="color-dot" data-color="#8b5cf6" style="background:#8b5cf6;"></span>
+                        <span class="color-dot" data-color="#ef4444" style="background:#ef4444;"></span>
+                        <span class="color-dot" data-color="#f59e0b" style="background:#f59e0b;"></span>
+                        <span class="color-dot" data-color="#0ea5e9" style="background:#0ea5e9;"></span>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-secondary" id="custom-res-cancel">Cancel</button>
+                    <button class="btn-primary-sm" id="custom-res-create">Create Resource</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Menu Panel -->
+    <div class="notif-panel" id="help-panel" style="right:80px;">
+        <div class="notif-header"><h4>Help & Resources</h4></div>
+        <div class="notif-list" id="help-list">
+            <a class="notif-item help-link" href="https://developer.hashicorp.com/terraform/docs" target="_blank"><div class="notif-item-icon info">T</div><div class="notif-item-body">Terraform Documentation<div class="notif-item-time">developer.hashicorp.com</div></div></a>
+            <a class="notif-item help-link" href="https://registry.terraform.io" target="_blank"><div class="notif-item-icon info">R</div><div class="notif-item-body">Terraform Registry<div class="notif-item-time">Browse providers & modules</div></div></a>
+            <div class="notif-item help-link" id="help-shortcuts"><div class="notif-item-icon info">?</div><div class="notif-item-body">Keyboard Shortcuts<div class="notif-item-time">View all shortcuts</div></div></div>
+            <div class="notif-item help-link" id="help-getting-started"><div class="notif-item-icon success">G</div><div class="notif-item-body">Getting Started Guide<div class="notif-item-time">Learn the basics</div></div></div>
+        </div>
+    </div>
+
     <!-- Selection Rectangle -->
     <div class="selection-box" id="selection-box" style="display:none;"></div>
 
     <!-- Toast -->
     <div class="toast-container" id="toast-container"></div>
 
-    <script src="app.js?v=9"></script>
+    <script src="app.js?v=10"></script>
 </body>
 </html>
